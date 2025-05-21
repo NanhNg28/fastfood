@@ -1,0 +1,9 @@
+package com.nanhng.FastFood.other_service.storage;
+
+import java.io.InputStream;
+
+public interface StorageResource {
+    InputStream readResource(String path);
+    String writeResource(InputStream inputStream,String path);
+    boolean deleteFile(String file);
+}

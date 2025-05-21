@@ -1,0 +1,17 @@
+package com.nanhng.FastFood.dto.request.user;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
+
+@Getter
+@Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class UpdateProfileUserReq {
+    @NotNull
+    @JsonProperty("address_id")
+    Integer addressId;
+}
