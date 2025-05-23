@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDetailRes {
+    Integer id;
     String username;
     String phone;
     String email;
@@ -21,5 +22,6 @@ public class UserDetailRes {
     RoleType role;
     String city;
     String street;
+    Integer addressId;
     String authToken;
 }

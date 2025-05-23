@@ -23,6 +23,6 @@ public interface UserService {
     List<Integer> deleteUsers(IdsRequest request);
     User changePassword(UserChangePasswordReq request);
     BaseResponse<List<UserListRes>> getListUser(int page, String keyword, ActiveStatus status);
-    UserDetailRes getMyProfile();
-    UserDetailRes getUserDetail(int id);
+    User getMyProfile();
+    User getUserDetail(int id);
 }

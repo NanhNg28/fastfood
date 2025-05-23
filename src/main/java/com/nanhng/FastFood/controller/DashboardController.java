@@ -31,7 +31,7 @@ public class DashboardController {
         return ResponseEntity.ok(new BaseResponse<>(dashboardService.calculateTotalRevenueByMonth(),"find total revenue successfully"));
     }
 
-    @Operation(summary = "get data of revenue each month")
+    @Operation(summary = "get data of product revenue each month")
     @GetMapping("v1/dashboard/product-revenue")
     public ResponseEntity<BaseResponse<List<ProductRevenueRes>>> getProductRevenue() {
         return ResponseEntity.ok(new BaseResponse<>(dashboardService.calculateProductsRevenueByMonth(),"find total revenue of product successfully"));
@@ -42,10 +42,19 @@ public class DashboardController {
     public ResponseEntity<BaseResponse<List<OrderCountRes>>> countNumberOfOrder(){
         return ResponseEntity.ok(new BaseResponse<>(dashboardService.countOrderByMonth(),"count number of orders each month"));
     }
+
     @Operation(summary = "export data of revenue each month as excel")
     @GetMapping("v1/dashboard/export-total-revenue-by-month")
     public ResponseEntity<InputStreamResource> exportTotalRevenueByMonth() {
         return ResponseEntity.ok().contentType(MediaType.valueOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(new InputStreamResource(dashboardService.excelTotalRevenueByMonth()));
     }
+
+    @Operation(summary = "export data of revenue each month as excel")
+    @GetMapping("v1/dashboard/export-product-revenue-by-month")
+    public ResponseEntity<InputStreamResource> exportProductRevenue() {
+        return ResponseEntity.ok().contentType(MediaType.valueOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(new InputStreamResource(dashboardService.excelProductByMonth()));
+    }
+
 }

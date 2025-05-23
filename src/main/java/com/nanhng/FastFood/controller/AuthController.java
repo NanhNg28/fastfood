@@ -27,25 +27,25 @@ public class AuthController {
     private final UserService userService;
     private final OtpService otpService;
 
-    @Operation(description = "login")
+    @Operation(description = "login") //check
     @PostMapping("v1/auth/login")
     public ResponseEntity<BaseResponse<UserDetailRes>>LoginUser(@RequestBody @Valid UserLoginReq request){
         UserDetailRes user = userService.loginUser(request);
         return ResponseEntity.ok(new BaseResponse<>(user,"Login successful"));
     }
 
-    @Operation(description = "register")
+    @Operation(description = "register") //check
     @PostMapping("v1/auth/register")
     public ResponseEntity<BaseResponse<UserDetailRes>> registerUser(@RequestBody @Valid UserRegisterReq request){
         UserDetailRes user = userService.registerUser(request);
         return ResponseEntity.ok(new BaseResponse<>(user,"Register successful"));
     }
 
-    @Operation(description = "forgot password")
-    @PostMapping("v1/auth/forgot-password")
-    public ResponseEntity<BaseResponse<User>> changePassword(@RequestBody @Valid UserForgotPasswordReq request){
-        return ResponseEntity.ok(new BaseResponse<>(userService.forgotPassword(request),"change user`s password successfully"));
-    }
+//    @Operation(description = "forgot password")
+//    @PostMapping("v1/auth/forgot-password")
+//    public ResponseEntity<BaseResponse<User>> changePassword(@RequestBody @Valid UserForgotPasswordReq request){
+//        return ResponseEntity.ok(new BaseResponse<>(userService.forgotPassword(request),"change user`s password successfully"));
+//    }
 
     @Operation(description = "send OTP")
     @PostMapping("v1/auth/send-otp")

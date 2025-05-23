@@ -12,4 +12,5 @@ public interface DashboardService {
     List<ProductRevenueRes> calculateProductsRevenueByMonth();
     List<OrderCountRes> countOrderByMonth();
     InputStream excelTotalRevenueByMonth();
+    InputStream excelProductByMonth();
 }

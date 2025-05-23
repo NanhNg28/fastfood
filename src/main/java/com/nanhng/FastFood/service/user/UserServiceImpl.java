@@ -53,7 +53,7 @@ public class UserServiceImpl extends BaseService implements UserService {
                 .phone(request.getPhone())
                 .email(request.getEmail())
                 .status(ActiveStatus.ACTIVE)
-                .role(request.getRole())
+                .role(RoleType.CUSTOMER)
                 .deleted(false)
                 .build();
         Address address = Address.builder()
@@ -93,22 +93,23 @@ public class UserServiceImpl extends BaseService implements UserService {
         if(userRepository.existsUserByPhone(request.getPhone())){
             throw new LovelyException("phone number already in use", HttpStatus.BAD_REQUEST);
         }
-        User user = User.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .phone(request.getPhone())
-                .email(request.getEmail())
-                .status(ActiveStatus.ACTIVE)
-                .role(request.getRole())
-                .deleted(false)
-                .build();
-        userRepository.save(user);
         Address address = Address.builder()
                 .city(request.getCity())
                 .street(request.getStreet())
                 .status(ActiveStatus.ACTIVE)
                 .build();
         addressRepository.save(address);
+        User user = User.builder()
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .phone(request.getPhone())
+                .email(request.getEmail())
+                .status(ActiveStatus.ACTIVE)
+                .role(RoleType.CUSTOMER)
+                .deleted(false)
+                .addressId(address.getId())
+                .build();
+        userRepository.save(user);
 
         return UserDetailRes.builder()
                 .username(user.getUsername())
@@ -118,6 +119,7 @@ public class UserServiceImpl extends BaseService implements UserService {
                 .role(user.getRole())
                 .city(address.getCity())
                 .street(address.getStreet())
+                .addressId(address.getId())
                 .authToken(jwtToKenProvider.generateToken(user.getId()))
                 .build();
     }
@@ -166,28 +168,26 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
-    public UserDetailRes getMyProfile() {
+    public User getMyProfile() {
         User user = getUser();
 
-        return getUserDetailRes(user);
+        return user;
     }
 
     @Override
-    public UserDetailRes getUserDetail(int id) {
+    public User getUserDetail(int id) {
         User user = getUser(RoleType.ADMIN);
-        log.info(String.valueOf(id));
 
         User userFound = userRepository.findById(id).orElse(null);
         if(userFound == null){
             throw new LovelyException("user not found", HttpStatus.NOT_FOUND);
         }
-        return getUserDetailRes(userFound);
+        return userFound;
     }
 
     private UserDetailRes getUserDetailRes(User user){
-
-
         UserDetailRes userDetailRes = UserDetailRes.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .phone(user.getPhone())
                 .email(user.getEmail())

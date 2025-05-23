@@ -59,14 +59,14 @@ public class UserController {
     }
 
     @Operation(description = "get my profile")
-    @GetMapping(path = "v1/user/my-profile")
-    public ResponseEntity<BaseResponse<UserDetailRes>> getMyProfile() {
+    @GetMapping(path = "v1/user/my-profile") //done
+    public ResponseEntity<BaseResponse<User>> getMyProfile() {
         return ResponseEntity.ok(new BaseResponse<>(userService.getMyProfile(),"getting my profile successfully"));
     }
 
     @Operation(description = "get user profile")
     @GetMapping(path = "v1/user/{id}")
-    public ResponseEntity<BaseResponse<UserDetailRes>> getUserProfile(@PathVariable("id") int userId) {
-        return ResponseEntity.ok(new BaseResponse<>(userService.getUserDetail(userId),"getting my profile successfully"));
+    public ResponseEntity<BaseResponse<User>> getUserProfile(@PathVariable("id") int userId) {
+        return ResponseEntity.ok(new BaseResponse<>(userService.getUserDetail(userId),"getting user successfully"));
     }
 }

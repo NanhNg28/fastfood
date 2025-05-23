@@ -83,6 +83,45 @@ public class DashboardServiceImpl extends BaseService implements DashboardServic
         }
     }
 
+    @Override
+    public InputStream excelProductByMonth() {
+        User user = getUser(RoleType.ADMIN);
+
+        List<ProductRevenueRes> list = orderItemRepository.calculateRevenueByMonth();
+
+        try {
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet =workbook.createSheet("Revenue");
+            CellStyle style = MyCellStyle(workbook);
+            sheet.setDefaultColumnWidth(30);
+            Row row = sheet.createRow(0);
+            ExcelService.createCell(row, "STT",0, style);
+
+            ExcelService.createCell(row, "Tháng",1, style);
+
+            ExcelService.createCell(row, "Sản phẩm",2, style);
+
+            ExcelService.createCell(row, "Doanh thu",3, style);
+
+            for(int i = 0; i < list.size(); i++) {
+                row = sheet.createRow(i+1);
+
+                ExcelService.createCell(row, String.valueOf(i+1),0, style);
+                ExcelService.createCell(row, list.get(i).getDate().toString(),1, style);
+                ExcelService.createCell(row, list.get(i).getProductName(),2, style);
+                ExcelService.createCell(row, list.get(i).getRevenue().toString(),3, style);
+            }
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            workbook.write(out);
+            workbook.close();
+            return new ByteArrayInputStream(out.toByteArray());
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new LovelyException("can not create excel file");
+        }
+    }
+
     private CellStyle MyCellStyle(Workbook workbook) {
         CellStyle style = workbook.createCellStyle();
         // Set black borders

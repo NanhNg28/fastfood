@@ -17,17 +17,15 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserRegisterReq {
 
-    @NotBlank
+    @NotBlank(message = "username can't be blank")
     String username;
-    @NotBlank
+    @NotBlank(message = "password can't be blank")
     String password;
     @NotBlank
     String confirmPassword;
     String email;
-    @NotBlank
+    @NotBlank(message = "phone number can't be blank")
     String phone;
-    @NotNull
-    RoleType role;
 
     @NotBlank
     String city;
