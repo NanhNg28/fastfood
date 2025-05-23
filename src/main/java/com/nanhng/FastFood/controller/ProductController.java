@@ -57,9 +57,9 @@ public class ProductController {
         return ResponseEntity.ok(new BaseResponse<>(productService.deleteProductByIds(request),"delete successfully"));
     }
 
-    @Operation(description = "filter by category")
+    @Operation(description = "filter by category")//done
     @GetMapping(path = "v1/category/food")
-    public ResponseEntity<BaseResponse<List<ProductRes>>> searchByCategory(@RequestParam(name =  "category") int categoryId, @RequestParam int page) {
+    public ResponseEntity<BaseResponse<List<ProductRes>>> searchByCategory(@RequestParam(name =  "categoryId") int categoryId, @RequestParam int page) {
         return ResponseEntity.ok(new BaseResponse<>(productService.getListProductByCategory(categoryId,page),"Search successfully"));
     }
 

@@ -21,25 +21,25 @@ import java.util.List;
 public class CategoryController {
     private final CategoryService categoryService;
 
-    @Operation(description = "add new category")
+    @Operation(description = "add new category") //done
     @PostMapping("v1/category/add")
     public ResponseEntity<BaseResponse<Category>> addCategory(@Valid @RequestBody AddCategoryReq request) {
         return ResponseEntity.ok(new BaseResponse<>(categoryService.addCategory(request),"add category successfully"));
     }
 
-    @Operation(description = "update category")
+    @Operation(description = "update category")//done
     @PostMapping("v1/category/update")
-    public ResponseEntity<BaseResponse<Category>> updateCategory(@RequestBody UpdateCategoryReq request) {
+    public ResponseEntity<BaseResponse<Category>> updateCategory(@RequestBody @Valid UpdateCategoryReq request) {
         return ResponseEntity.ok(new BaseResponse<>(categoryService.updateCategory(request),"update category successfully"));
     }
 
-    @Operation(description = "get detail category")
+    @Operation(description = "get detail category")//done
     @GetMapping("v1/category/{id}")
     public ResponseEntity<BaseResponse<Category>> getCategory(@PathVariable int id) {
         return ResponseEntity.ok(new BaseResponse<>(categoryService.getDetailCategory(id),"get category detail successfully"));
     }
 
-    @Operation(description = "get all category")
+    @Operation(description = "get all category")//done
     @GetMapping("v1/category/list")
     public ResponseEntity<BaseResponse<List<Category>>> getAllCategory(@RequestParam int page,
                                                                        @RequestParam(required = false) String searchKeyword,

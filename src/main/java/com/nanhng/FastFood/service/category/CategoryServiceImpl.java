@@ -70,11 +70,12 @@ public class CategoryServiceImpl extends BaseService implements CategoryService 
         User user = getUser(RoleType.ADMIN);
 
         List<Integer> ids = request.getIds();
-        List<Integer> existIds = categoryRepository.findAllByIds(ids);
-        Integer notExistId = ids.stream().filter(id -> !existIds.contains(id)).findFirst().orElse(null);
-        if(notExistId != null) {
+        List<Integer> existIds = categoryRepository.getAllIdToCheckExist(ids);
+        List<Integer> notExistId = ids.stream().filter(id -> !existIds.contains(id)).toList();
+        if(!notExistId.isEmpty()) {
             throw new LovelyException("category already exists");
         }
+        categoryRepository.deleteCategory(ids);
         return existIds;
     }
 
