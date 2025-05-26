@@ -82,7 +82,7 @@ public class CartServiceImpl extends BaseService implements CartService {
         if(cart == null) {
             throw new LovelyException("Cart not found", HttpStatus.BAD_REQUEST);
         }
-        cart.setCartItems(cartItemRepository.findAllByCartId(user.getId()));
+        cart.setCartItems(cartItemRepository.findAllByCartId(cart.getId()));
         cart.setTotalPrice(calculateTotalPrice(cart.getCartItems()));
         return cart;
     }

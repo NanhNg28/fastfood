@@ -22,7 +22,7 @@ public class CartController {
 //        return ResponseEntity.ok(cartService.addCart(request));
 //    }
 
-    @Operation(summary = "get list cart item")
+    @Operation(summary = "get list cart item")//done
     @GetMapping("v1/cart/get")
     public ResponseEntity<Cart> getCart(){
         return ResponseEntity.ok(cartService.getCart());
