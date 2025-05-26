@@ -9,6 +9,7 @@ import com.nanhng.FastFood.exception.LovelyException;
 import com.nanhng.FastFood.service.repository.cart.CartRepository;
 import com.nanhng.FastFood.service.repository.cartItem.CartItemRepository;
 import com.nanhng.FastFood.service.BaseService;
+import com.nanhng.FastFood.service.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import java.util.List;
 public class CartServiceImpl extends BaseService implements CartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final UserRepository userRepository;
     @Override
     public Cart addCart(AddCartReq request) {
         User user = getUser();
@@ -32,6 +34,20 @@ public class CartServiceImpl extends BaseService implements CartService {
         Cart cart = new Cart();
         cart.setUserId(user.getId());
         return cartRepository.save(cart);
+    }
+
+    @Override
+    public void addCart(Integer userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if(user == null || user.isDeleted()) {
+            throw new LovelyException("user not exists", HttpStatus.BAD_REQUEST);
+        }
+        if(cartRepository.existsCartByUserId(user.getId())) {
+            throw new LovelyException("cart already exists", HttpStatus.BAD_REQUEST);
+        }
+        Cart cart = new Cart();
+        cart.setUserId(user.getId());
+        cartRepository.save(cart);
     }
 
     @Override

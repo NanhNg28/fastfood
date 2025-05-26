@@ -1,4 +1,4 @@
-package com.nanhng.FastFood.dto.response.product;
+package com.nanhng.FastFood.dto.response.category;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -9,15 +9,10 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDetailRes {
+public class CategoryListRes {
+    Integer id;
     String name;
-    Double price;
-    String categoryName;
-
-    int quantity;
-    String shortDescription;
-    String longDescription;
-
+    String description;
     String thumbUrl;
     String thumbName;
 }

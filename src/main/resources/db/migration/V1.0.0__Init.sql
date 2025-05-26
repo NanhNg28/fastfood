@@ -115,6 +115,10 @@ CREATE TABLE `order_item` (
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
+INSERT INTO `user` (username, password, email, phone, status, role, address_id, deleted, created_at, updated_at)
+VALUES ('admin', '$2a$10$90oddm68E7vWuBmnyv/ecu2yjNXlaYq9C0QHOBXQ93/2xEDX4J.iq', 'admin@gmail.com', '0123456789', 1, 0, NULL, FALSE, NOW(), NOW());
+
+
 
 
 

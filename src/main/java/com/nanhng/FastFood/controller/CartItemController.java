@@ -29,7 +29,7 @@ public class CartItemController {
 
     @Operation(description = "update cart item")
     @PostMapping("v1/cart-item/update")
-    public ResponseEntity<CartItem> updateCartItem(@RequestBody UpdateCartItemReq request) {
+    public ResponseEntity<CartItem> updateCartItem(@RequestBody @Valid UpdateCartItemReq request) {
         return ResponseEntity.ok(cartItemService.updateCartItem(request));
     }
 

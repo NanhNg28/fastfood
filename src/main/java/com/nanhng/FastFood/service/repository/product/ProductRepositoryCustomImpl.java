@@ -1,8 +1,9 @@
 package com.nanhng.FastFood.service.repository.product;
 
 import com.nanhng.FastFood.dto.constant.ActiveStatus;
-import com.nanhng.FastFood.dto.response.product.ProductRes;
+import com.nanhng.FastFood.dto.response.product.ProductListRes;
 import com.nanhng.FastFood.entity.product.QProduct;
+import com.nanhng.FastFood.entity.upload_file.QUploadFile;
 import com.nanhng.FastFood.service.repository.BaseRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -19,11 +20,12 @@ import static com.nanhng.FastFood.util.Constant.PAGE_SIZE;
 public class ProductRepositoryCustomImpl extends BaseRepository implements ProductRepositoryCustom {
 
     QProduct qProduct = QProduct.product;
+    QUploadFile qUploadFile = QUploadFile.uploadFile;
     @PersistenceContext
     EntityManager entityManager;
 
     @Override
-    public List<ProductRes> getAllProduct(int page,String keyword, ActiveStatus status) {
+    public List<ProductListRes> getAllProduct(int page, String keyword, ActiveStatus status) {
 
         JPAQueryFactory query = new JPAQueryFactory(entityManager);
         BooleanBuilder builder = new BooleanBuilder();
@@ -32,13 +34,16 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
         if(keyword!=null &&!keyword.isBlank()){
             builder.andAnyOf(qProduct.name.containsIgnoreCase(keyword));
         }
-        return query.from(qProduct)
+        return query.from(qProduct).leftJoin(qUploadFile).on(qProduct.imageId.eq(qUploadFile.id))
                 .where(builder)
-                .select(Projections.fields(ProductRes.class,
+                .select(Projections.fields(ProductListRes.class,
                         qProduct.id,
                         qProduct.name,
                         qProduct.price,
-                        qProduct.category.name.as("categoryName")))
+                        qProduct.category.name.as("categoryName"),
+                        qUploadFile.thumbFilePath.as("thumbUrl"),
+                        qUploadFile.thumbFileName.as("thumbName")
+                        ))
                 .offset(page*PAGE_SIZE)
                 .limit(PAGE_SIZE)
                 .fetch();
@@ -53,7 +58,7 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
             builder.andAnyOf(qProduct.name.containsIgnoreCase(keyword));
         }
 
-        Long res = query().from(qProduct)
+        Long res = query().from(qProduct).leftJoin(qUploadFile).on(qProduct.imageId.eq(qUploadFile.id))
                 .where(builder)
                 .select(qProduct.id.count())
                 .fetchFirst();
@@ -91,20 +96,37 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
     }
 
     @Override
-    public List<ProductRes> getAllProductByCategory(int categoryId, int page) {
+    public long countAllProductByCategory(int categoryId) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qProduct.deleted.eq(false));
+        builder.and(qProduct.status.eq(ActiveStatus.ACTIVE));
+        builder.and(qProduct.category.id.eq(categoryId));
+
+        Long count = query().from(qProduct).leftJoin(qUploadFile).on(qProduct.imageId.eq(qUploadFile.id))
+                .where(builder)
+                .select(qProduct.id.count())
+                .fetchOne();
+        return count==null?0:count;
+    }
+
+    @Override
+    public List<ProductListRes> getAllProductByCategory(int categoryId, int page) {
         JPAQueryFactory query = new JPAQueryFactory(entityManager);
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qProduct.deleted.eq(false));
         builder.and(qProduct.status.eq(ActiveStatus.ACTIVE));
         builder.and(qProduct.category.id.eq(categoryId));
 
-        return query.from(qProduct)
+        return query.from(qProduct).leftJoin(qUploadFile).on(qProduct.imageId.eq(qUploadFile.id))
                 .where(builder)
-                .select(Projections.fields(ProductRes.class,
+                .select(Projections.fields(ProductListRes.class,
                         qProduct.id,
                         qProduct.name,
                         qProduct.price,
-                        qProduct.category.name.as("categoryName")))
+                        qProduct.category.name.as("categoryName"),
+                        qUploadFile.thumbFilePath.as("thumbUrl"),
+                        qUploadFile.thumbFileName.as("thumbName")
+                ))
                 .fetch();
     }
 

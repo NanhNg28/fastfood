@@ -8,10 +8,12 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductRes {
+public class ProductListRes {
     Integer id;
     String name;
     Double price;
     String categoryName;
+    String thumbUrl;
+    String thumbName;
 
 }

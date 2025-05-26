@@ -17,12 +17,20 @@ import java.util.List;
 
 public interface UserService {
     User addUser(UserRegisterReq req);
+
     UserDetailRes loginUser(UserLoginReq request);
+
     UserDetailRes registerUser(UserRegisterReq request);
+
     User updateProfileUser(UpdateProfileUserReq request);
+
     List<Integer> deleteUsers(IdsRequest request);
+
     User changePassword(UserChangePasswordReq request);
+
     BaseResponse<List<UserListRes>> getListUser(int page, String keyword, ActiveStatus status);
+
     User getMyProfile();
+
     User getUserDetail(int id);
 }

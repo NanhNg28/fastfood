@@ -2,6 +2,8 @@ CREATE TABLE `upload_file` (
                                `id`              INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID file',
                                `origin_file_path` VARCHAR(255) NOT NULL COMMENT 'Đường dẫn gốc',
                                `thumb_file_path`  VARCHAR(255) DEFAULT NULL COMMENT 'Đường dẫn ảnh thumb (nếu có)',
+                               `origin_file_name` VARCHAR(255) NOT NULL COMMENT 'tên gốc',
+                               `thumb_file_name`  VARCHAR(255) DEFAULT NULL COMMENT 'tên ảnh thumb (nếu có)',
                                `type`             INT NOT NULL COMMENT 'Loại file (enum UploadFileType)',
                                `width`            INT DEFAULT NULL COMMENT 'Chiều rộng (nếu là ảnh/video)',
                                `height`           INT DEFAULT NULL COMMENT 'Chiều cao (nếu là ảnh/video)',

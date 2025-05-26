@@ -8,7 +8,7 @@ import com.nanhng.FastFood.dto.request.product.UpdateProductReq;
 import com.nanhng.FastFood.dto.response.BaseResponse;
 import com.nanhng.FastFood.dto.response.product.AddProductImageRes;
 import com.nanhng.FastFood.dto.response.product.ProductDetailRes;
-import com.nanhng.FastFood.dto.response.product.ProductRes;
+import com.nanhng.FastFood.dto.response.product.ProductListRes;
 import com.nanhng.FastFood.entity.product.Product;
 import com.nanhng.FastFood.service.product.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,17 +37,17 @@ public class ProductController {
         return ResponseEntity.ok(productService.updateProduct(request));
     }
 
-    @Operation(description = "get detail food")//done
+    @Operation(description = "get detail food") //done
     @GetMapping(path = "v1/food/detail/{id}")
     public ResponseEntity<ProductDetailRes> getFoodDetail(@PathVariable int id) {
         return ResponseEntity.ok(productService.getDetailProduct(id));
     }
 
-    @Operation(description = "get list food")//done
+    @Operation(description = "get list food") //done
     @GetMapping(path = "v1/food/list")
-    public ResponseEntity<BaseResponse<List<ProductRes>>> getListFood(@RequestParam int page,
-                                                        @RequestParam(required = false) String keyword,
-                                                        @RequestParam(required = false)ActiveStatus status) {
+    public ResponseEntity<BaseResponse<List<ProductListRes>>> getListFood(@RequestParam int page,
+                                                                          @RequestParam(required = false) String keyword,
+                                                                          @RequestParam(required = false)ActiveStatus status) {
         return ResponseEntity.ok(productService.getListProduct(page,keyword,status));
     }
 
@@ -59,13 +59,13 @@ public class ProductController {
 
     @Operation(description = "filter by category")//done
     @GetMapping(path = "v1/category/food")
-    public ResponseEntity<BaseResponse<List<ProductRes>>> searchByCategory(@RequestParam(name =  "categoryId") int categoryId, @RequestParam int page) {
-        return ResponseEntity.ok(new BaseResponse<>(productService.getListProductByCategory(categoryId,page),"Search successfully"));
+    public ResponseEntity<BaseResponse<List<ProductListRes>>> searchByCategory(@RequestParam(name =  "categoryId") int categoryId, @RequestParam int page) {
+        return ResponseEntity.ok(productService.getListProductByCategory(categoryId,page));
     }
 
-    @Operation(description = "add product image path")
-    @PostMapping(path = "v1/food/image/add")
-    public ResponseEntity<BaseResponse<AddProductImageRes>> addProductImage(@Valid @RequestBody AddProductImageReq request){
-        return ResponseEntity.ok(new BaseResponse<>(productService.addImagePath(request),"add image successfully"));
-    }
+//    @Operation(description = "add product image path")
+//    @PostMapping(path = "v1/food/image/add")
+//    public ResponseEntity<BaseResponse<AddProductImageRes>> addProductImage(@Valid @RequestBody AddProductImageReq request){
+//        return ResponseEntity.ok(new BaseResponse<>(productService.addImageId(request),"add image successfully"));
+//    }
 }

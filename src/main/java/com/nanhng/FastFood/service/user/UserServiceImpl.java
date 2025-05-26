@@ -110,6 +110,7 @@ public class UserServiceImpl extends BaseService implements UserService {
         userRepository.save(user);
 
         return UserDetailRes.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .phone(user.getPhone())
                 .email(user.getEmail())

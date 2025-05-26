@@ -54,13 +54,16 @@ public class UploadFileServiceImpl implements UploadFileService {
             image.setType(UploadFileType.IMAGE);
             image.setSize(file.getSize());
             image.setOriginFilePath(storageResource.writeResource(file.getInputStream(),"image/" + originalName));
+            image.setOriginalFileName(originalName);
             ByteArrayOutputStream thumbOutputStream = createThumbnail(file, type, fileName);
             if (thumbOutputStream != null) {
                 try (InputStream inputStream = new ByteArrayInputStream(thumbOutputStream.toByteArray())) {
                     image.setThumbFilePath(storageResource.writeResource(inputStream, "image/" + thumbName));
+                    image.setThumbFileName(thumbName);
                 }
             } else {
                 image.setThumbFilePath(image.getOriginFilePath());
+                image.setThumbFileName(originalName);
             }
             image = uploadFileRepository.save(image);
             return image;

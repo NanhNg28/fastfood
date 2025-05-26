@@ -1,10 +1,13 @@
 package com.nanhng.FastFood.service.repository.category;
 
 import com.nanhng.FastFood.dto.constant.ActiveStatus;
+import com.nanhng.FastFood.dto.response.category.CategoryListRes;
 import com.nanhng.FastFood.entity.category.Category;
 import com.nanhng.FastFood.entity.category.QCategory;
+import com.nanhng.FastFood.entity.upload_file.QUploadFile;
 import com.nanhng.FastFood.service.repository.BaseRepository;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -17,6 +20,7 @@ import static com.nanhng.FastFood.util.Constant.PAGE_SIZE;
 
 public class CategoryRepositoryCustomImpl extends BaseRepository implements  CategoryRepositoryCustom {
     QCategory qCategory = QCategory.category;
+    QUploadFile qUploadFile = QUploadFile.uploadFile;
     @PersistenceContext
     EntityManager entityManager;
 
@@ -36,7 +40,7 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements  Cat
     }
 
     @Override
-    public List<Category> findAll(int page, String keyword, ActiveStatus status) {
+    public List<CategoryListRes> findAll(int page, String keyword, ActiveStatus status) {
         JPAQueryFactory query = new JPAQueryFactory(entityManager);
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qCategory.status.eq(Objects.requireNonNullElse(status, ActiveStatus.ACTIVE)));
@@ -44,9 +48,15 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements  Cat
         if(keyword!=null &&!keyword.isBlank()){
             builder.andAnyOf(qCategory.name.containsIgnoreCase(keyword));
         }
-        return query.from(qCategory)
+        return query.from(qCategory).leftJoin(qUploadFile).on(qCategory.imageId.eq(qUploadFile.id))
                 .where(builder)
-                .select(qCategory)
+                .select(Projections.fields(CategoryListRes.class,
+                        qCategory.id,
+                        qCategory.name,
+                        qCategory.description,
+                        qUploadFile.thumbFilePath.as("thumbUrl"),
+                        qUploadFile.thumbFileName.as("thumbName")
+                        ))
                 .offset(PAGE_SIZE*page).limit(PAGE_SIZE)
                 .fetch();
     }
@@ -58,7 +68,7 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements  Cat
         builder.and(qCategory.deleted.eq(false));
         builder.and(qCategory.id.in(ids));
 
-        return query.from(qCategory)
+        return query.from(qCategory).leftJoin(qUploadFile).on(qCategory.imageId.eq(qUploadFile.id))
                 .where(builder)
                 .select(qCategory.id)
                 .fetch();

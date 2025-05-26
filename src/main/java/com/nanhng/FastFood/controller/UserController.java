@@ -6,7 +6,6 @@ import com.nanhng.FastFood.dto.request.user.UpdateProfileUserReq;
 import com.nanhng.FastFood.dto.request.user.UserChangePasswordReq;
 import com.nanhng.FastFood.dto.request.user.UserRegisterReq;
 import com.nanhng.FastFood.dto.response.BaseResponse;
-import com.nanhng.FastFood.dto.response.user.UserDetailRes;
 import com.nanhng.FastFood.dto.response.user.UserListRes;
 import com.nanhng.FastFood.entity.user.User;
 import com.nanhng.FastFood.service.user.UserService;
@@ -45,7 +44,7 @@ public class UserController {
 
     @Operation(description = "add new user (user, admin, employee)")
     @PostMapping("v1/user/add")
-    public ResponseEntity<BaseResponse<User>> RegisterUser(@Valid @RequestBody UserRegisterReq request){
+    public ResponseEntity<BaseResponse<User>> AddUser(@Valid @RequestBody UserRegisterReq request){
         User user = userService.addUser(request);
         return ResponseEntity.ok(new BaseResponse<>(user,"success in adding new user"));
     }

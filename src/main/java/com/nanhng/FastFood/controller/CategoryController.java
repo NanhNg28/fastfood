@@ -5,6 +5,8 @@ import com.nanhng.FastFood.dto.request.category.AddCategoryReq;
 import com.nanhng.FastFood.dto.request.category.UpdateCategoryReq;
 import com.nanhng.FastFood.dto.request.ids.IdsRequest;
 import com.nanhng.FastFood.dto.response.BaseResponse;
+import com.nanhng.FastFood.dto.response.category.CategoryDetailRes;
+import com.nanhng.FastFood.dto.response.category.CategoryListRes;
 import com.nanhng.FastFood.entity.category.Category;
 import com.nanhng.FastFood.service.category.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,16 +36,16 @@ public class CategoryController {
     }
 
     @Operation(description = "get detail category")//done
-    @GetMapping("v1/category/{id}")
-    public ResponseEntity<BaseResponse<Category>> getCategory(@PathVariable int id) {
+    @GetMapping("v1/category/detail/{id}")
+    public ResponseEntity<BaseResponse<CategoryDetailRes>> getCategory(@PathVariable int id) {
         return ResponseEntity.ok(new BaseResponse<>(categoryService.getDetailCategory(id),"get category detail successfully"));
     }
 
     @Operation(description = "get all category")//done
     @GetMapping("v1/category/list")
-    public ResponseEntity<BaseResponse<List<Category>>> getAllCategory(@RequestParam int page,
-                                                                       @RequestParam(required = false) String searchKeyword,
-                                                                       @RequestParam(required = false)ActiveStatus status) {
+    public ResponseEntity<BaseResponse<List<CategoryListRes>>> getAllCategory(@RequestParam int page,
+                                                                              @RequestParam(required = false) String searchKeyword,
+                                                                              @RequestParam(required = false)ActiveStatus status) {
         return ResponseEntity.ok(categoryService.getAllCategory(page,searchKeyword,status));
     }
 

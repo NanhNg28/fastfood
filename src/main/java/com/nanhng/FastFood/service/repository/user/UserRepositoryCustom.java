@@ -2,7 +2,6 @@ package com.nanhng.FastFood.service.repository.user;
 
 import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.request.user.UserRegisterReq;
-import com.nanhng.FastFood.dto.response.product.ProductRes;
 import com.nanhng.FastFood.dto.response.user.UserListRes;
 import com.nanhng.FastFood.entity.user.User;
 

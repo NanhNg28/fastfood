@@ -1,5 +1,6 @@
 package com.nanhng.FastFood.controller;
 
+import com.nanhng.FastFood.dto.request.cart.AddCartReq;
 import com.nanhng.FastFood.dto.request.otp.SendOtpReq;
 import com.nanhng.FastFood.dto.request.user.UserChangePasswordReq;
 import com.nanhng.FastFood.dto.request.user.UserLoginReq;
@@ -8,6 +9,7 @@ import com.nanhng.FastFood.dto.response.BaseResponse;
 import com.nanhng.FastFood.dto.response.otp.SendOtpRes;
 import com.nanhng.FastFood.dto.response.user.UserDetailRes;
 import com.nanhng.FastFood.entity.user.User;
+import com.nanhng.FastFood.service.cart.CartService;
 import com.nanhng.FastFood.service.otp.OtpService;
 import com.nanhng.FastFood.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,18 +28,20 @@ public class AuthController {
 
     private final UserService userService;
     private final OtpService otpService;
+    private final CartService cartService;
 
-    @Operation(description = "login") //check
+    @Operation(description = "login") //done
     @PostMapping("v1/auth/login")
     public ResponseEntity<BaseResponse<UserDetailRes>>LoginUser(@RequestBody @Valid UserLoginReq request){
         UserDetailRes user = userService.loginUser(request);
         return ResponseEntity.ok(new BaseResponse<>(user,"Login successful"));
     }
 
-    @Operation(description = "register") //check
+    @Operation(description = "register") //done
     @PostMapping("v1/auth/register")
     public ResponseEntity<BaseResponse<UserDetailRes>> registerUser(@RequestBody @Valid UserRegisterReq request){
         UserDetailRes user = userService.registerUser(request);
+        cartService.addCart(user.getId());
         return ResponseEntity.ok(new BaseResponse<>(user,"Register successful"));
     }
 
