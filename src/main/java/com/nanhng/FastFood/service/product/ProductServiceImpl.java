@@ -14,9 +14,9 @@ import com.nanhng.FastFood.entity.product.Product;
 import com.nanhng.FastFood.entity.upload_file.UploadFile;
 import com.nanhng.FastFood.entity.user.User;
 import com.nanhng.FastFood.exception.LovelyException;
-import com.nanhng.FastFood.repository.category.CategoryRepository;
-import com.nanhng.FastFood.repository.product.ProductRepository;
-import com.nanhng.FastFood.repository.upload_file.UploadFileRepository;
+import com.nanhng.FastFood.service.repository.category.CategoryRepository;
+import com.nanhng.FastFood.service.repository.product.ProductRepository;
+import com.nanhng.FastFood.service.repository.upload_file.UploadFileRepository;
 import com.nanhng.FastFood.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -38,10 +37,10 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     public Product addProduct(AddProductReq request) {
         User user = getUser(RoleType.ADMIN);
 
-        if(!categoryRepository.existsById(request.getCategoryId())) {
+        if(!categoryRepository.existById(request.getCategoryId())) {
             throw new LovelyException("Category not found", HttpStatus.BAD_REQUEST);
         }
-        if (productRepository.existsByName(request.getName())) {
+        if (productRepository.existByName(request.getName())) {
             throw new LovelyException("product already exist", HttpStatus.BAD_REQUEST);
         }
         Product product = Product.builder()
@@ -61,11 +60,10 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     public ProductDetailRes updateProduct(UpdateProductReq request) {
         User user = getUser(RoleType.ADMIN);
 
-        log.info(request.getCategoryId().toString());
-        if(!categoryRepository.existsById(request.getCategoryId())) {
+        if(!categoryRepository.existById(request.getCategoryId())) {
             throw new LovelyException("Category not found", HttpStatus.BAD_REQUEST);
         }
-        if(!productRepository.existsById(request.getId())) {
+        if(!productRepository.existById(request.getId())) {
             throw new LovelyException("product not found", HttpStatus.BAD_REQUEST);
         }
         Product product = productRepository.findById(request.getId()).orElse(null);
@@ -95,8 +93,8 @@ public class ProductServiceImpl extends BaseService implements ProductService {
 
     @Override
     public ProductDetailRes getDetailProduct(int id) {
-        if(!productRepository.existsById(id)) {
-            throw new LovelyException("product not found", HttpStatus.BAD_REQUEST);
+        if(!productRepository.existById(id)) {
+            throw new LovelyException("Không tìm thấy sản phẩm", HttpStatus.BAD_REQUEST);
         }
         Product product = productRepository.findById(id).get();
         return getProductDetailRes(product);
@@ -137,7 +135,6 @@ public class ProductServiceImpl extends BaseService implements ProductService {
 
         Product product = productRepository.findById(request.getProductId()).orElseThrow(()-> new LovelyException("product not found", HttpStatus.BAD_REQUEST));
         UploadFile uploadFile = uploadFileRepository.findById(request.getImageId()).orElseThrow(()-> new LovelyException("image not found", HttpStatus.BAD_REQUEST));
-        product.setImagePath(uploadFile.getOriginFilePath());
         productRepository.save(product);
         return AddProductImageRes.builder()
                 .name(product.getName())

@@ -22,6 +22,8 @@ public class Category extends BaseEntity {
     @NotNull
     String name;
     String description;
+    @Column(name = "image_id")
+    Integer imageId;
 
     @Column(name = "status", columnDefinition = "INT")
     ActiveStatus status;

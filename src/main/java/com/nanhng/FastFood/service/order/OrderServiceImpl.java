@@ -13,10 +13,9 @@ import com.nanhng.FastFood.entity.order.Order;
 import com.nanhng.FastFood.entity.order.OrderItem;
 import com.nanhng.FastFood.entity.user.User;
 import com.nanhng.FastFood.exception.LovelyException;
-import com.nanhng.FastFood.other_service.web_socket.WebSocketEventListener;
-import com.nanhng.FastFood.repository.address.AddressRepository;
-import com.nanhng.FastFood.repository.order.OrderRepository;
-import com.nanhng.FastFood.repository.orderItem.OrderItemRepository;
+import com.nanhng.FastFood.service.repository.address.AddressRepository;
+import com.nanhng.FastFood.service.repository.order.OrderRepository;
+import com.nanhng.FastFood.service.repository.orderItem.OrderItemRepository;
 import com.nanhng.FastFood.service.BaseService;
 import com.nanhng.FastFood.service.cart.CartService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j

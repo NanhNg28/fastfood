@@ -1,14 +1,13 @@
 package com.nanhng.FastFood.service.cart;
 
-import com.nanhng.FastFood.dto.constant.RoleType;
 import com.nanhng.FastFood.dto.request.cart.AddCartReq;
 import com.nanhng.FastFood.dto.request.cart.CartDetailReq;
 import com.nanhng.FastFood.entity.cart.Cart;
 import com.nanhng.FastFood.entity.cart.CartItem;
 import com.nanhng.FastFood.entity.user.User;
 import com.nanhng.FastFood.exception.LovelyException;
-import com.nanhng.FastFood.repository.cart.CartRepository;
-import com.nanhng.FastFood.repository.cartItem.CartItemRepository;
+import com.nanhng.FastFood.service.repository.cart.CartRepository;
+import com.nanhng.FastFood.service.repository.cartItem.CartItemRepository;
 import com.nanhng.FastFood.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -9,11 +9,10 @@ import com.nanhng.FastFood.dto.response.BaseResponse;
 import com.nanhng.FastFood.entity.category.Category;
 import com.nanhng.FastFood.entity.user.User;
 import com.nanhng.FastFood.exception.LovelyException;
-import com.nanhng.FastFood.repository.category.CategoryRepository;
+import com.nanhng.FastFood.service.repository.category.CategoryRepository;
 import com.nanhng.FastFood.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -70,12 +69,12 @@ public class CategoryServiceImpl extends BaseService implements CategoryService 
         User user = getUser(RoleType.ADMIN);
 
         List<Integer> ids = request.getIds();
-        List<Integer> existIds = categoryRepository.getAllIdToCheckExist(ids);
+        List<Integer> existIds = categoryRepository.getExistIds(ids);
         List<Integer> notExistId = ids.stream().filter(id -> !existIds.contains(id)).toList();
         if(!notExistId.isEmpty()) {
             throw new LovelyException("category already exists");
         }
-        categoryRepository.deleteCategory(ids);
+        categoryRepository.deleteByIds(ids);
         return existIds;
     }
 

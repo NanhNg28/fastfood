@@ -3,7 +3,7 @@ package com.nanhng.FastFood.service.address;
 import com.nanhng.FastFood.dto.request.address.UpdateAddressRequest;
 import com.nanhng.FastFood.entity.address.Address;
 import com.nanhng.FastFood.exception.LovelyException;
-import com.nanhng.FastFood.repository.address.AddressRepository;
+import com.nanhng.FastFood.service.repository.address.AddressRepository;
 import com.nanhng.FastFood.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

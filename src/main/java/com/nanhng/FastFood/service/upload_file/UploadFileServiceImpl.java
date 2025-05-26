@@ -4,7 +4,7 @@ import com.nanhng.FastFood.entity.upload_file.UploadFile;
 import com.nanhng.FastFood.entity.upload_file.constant.UploadFileType;
 import com.nanhng.FastFood.exception.LovelyException;
 import com.nanhng.FastFood.other_service.storage.StorageResource;
-import com.nanhng.FastFood.repository.upload_file.UploadFileRepository;
+import com.nanhng.FastFood.service.repository.upload_file.UploadFileRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;

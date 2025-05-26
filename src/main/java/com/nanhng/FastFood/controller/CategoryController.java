@@ -47,7 +47,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getAllCategory(page,searchKeyword,status));
     }
 
-    @Operation(description = "delete category")
+    @Operation(description = "delete category")//done
     @PostMapping("v1/category/delete")
     public ResponseEntity<BaseResponse<List<Integer>>> deleteCategory(@Valid @RequestBody IdsRequest ids) {
         return ResponseEntity.ok(new BaseResponse<>(categoryService.deleteCategory(ids),"delete category successfully"));
