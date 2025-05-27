@@ -1,0 +1,2 @@
+ALTER TABLE `orders`
+ADD `name` VARCHAR(255);

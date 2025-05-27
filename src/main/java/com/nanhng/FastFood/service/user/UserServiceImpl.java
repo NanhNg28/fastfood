@@ -74,6 +74,7 @@ public class UserServiceImpl extends BaseService implements UserService {
             throw new LovelyException("account not active", HttpStatus.UNAUTHORIZED);
         }
         return UserDetailRes.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .phone(user.getPhone())
                 .email(user.getEmail())
@@ -150,10 +151,13 @@ public class UserServiceImpl extends BaseService implements UserService {
     public User changePassword(UserChangePasswordReq request) {
         User user = getUser();
         if(request.getUserId()!=user.getId()){
-            throw new LovelyException("Can not change password of other user", HttpStatus.UNAUTHORIZED);
+            throw new LovelyException(" Không có quyền thay đổi mật khẩu", HttpStatus.UNAUTHORIZED);
         }
         if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword())){
-            throw new LovelyException("Old password incorrect", HttpStatus.BAD_REQUEST);
+            throw new LovelyException("sai mật khẩu cũ", HttpStatus.BAD_REQUEST);
+        }
+        if(request.getOldPassword().equals(request.getNewPassword())){
+            throw new LovelyException("Hãy nhập mậy khẩu khác mật khẩu cũ", HttpStatus.BAD_REQUEST);
         }
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         return userRepository.save(user);
@@ -161,6 +165,8 @@ public class UserServiceImpl extends BaseService implements UserService {
 
     @Override
     public BaseResponse<List<UserListRes>> getListUser(int page, String keyword, ActiveStatus status) {
+        User user = getUser(RoleType.ADMIN);
+
         long record = userRepository.totalRecord(keyword,status);
         List<UserListRes> list =  userRepository.getAllProduct(page,keyword,status);
         return new BaseResponse<>(list,record,page);

@@ -33,4 +33,6 @@ public class OrderDetailRes {
     Date updatedAt;
 
     Double totalPrice;
+    String name;
+    String note;
 }

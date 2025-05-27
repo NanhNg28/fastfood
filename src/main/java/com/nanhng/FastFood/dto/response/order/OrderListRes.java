@@ -32,4 +32,6 @@ public class OrderListRes {
 
     @Temporal(TemporalType.TIMESTAMP)
     Date updatedAt;
+    String name;
+    String note;
 }

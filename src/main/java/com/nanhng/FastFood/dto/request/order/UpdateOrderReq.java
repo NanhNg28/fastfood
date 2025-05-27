@@ -16,4 +16,6 @@ public class UpdateOrderReq {
     OrderStatus status;
     String city;
     String street;
+    String name;
+    String note;
 }

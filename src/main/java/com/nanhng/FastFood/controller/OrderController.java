@@ -28,7 +28,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.addOrder(order));
     }
 
-    @Operation(summary = "update order")
+    @Operation(summary = "admin update order")
     @PostMapping("v1/order/update")
     public ResponseEntity<Order> updateOrder(@RequestBody UpdateOrderReq request) {
         return ResponseEntity.ok(orderService.updateOrder(request));

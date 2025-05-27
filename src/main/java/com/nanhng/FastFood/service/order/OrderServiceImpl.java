@@ -52,6 +52,8 @@ public class OrderServiceImpl extends BaseService implements OrderService{
         Order order = new Order();
         Address address = addressRepository.findById(user.getAddressId()).orElseThrow(()->new LovelyException("User does not have exist address yet"));
         order.setUserId(user.getId());
+        order.setName(request.getName());
+        order.setNote(request.getNote());
         order.setStreet(address.getStreet());
         order.setCity(address.getCity());
         order.setStatus(OrderStatus.PENDING);
@@ -86,11 +88,17 @@ public class OrderServiceImpl extends BaseService implements OrderService{
         if(request.getStatus() != null) {
             order.setStatus(request.getStatus());
         }
-        if(request.getCity()!= null) {
+        if(request.getCity()!= null && !request.getCity().isBlank()) {
             order.setCity(request.getCity());
         }
-        if(request.getStreet() != null) {
+        if(request.getStreet() != null && !request.getStreet().isBlank()) {
             order.setStreet(request.getStreet());
+        }
+        if(request.getName() != null && !request.getName().isBlank()) {
+            order.setName(request.getName());
+        }
+        if(request.getNote() != null && !request.getNote().isBlank()) {
+            order.setNote(request.getNote());
         }
         return orderRepository.save(order);
     }
@@ -123,8 +131,7 @@ public class OrderServiceImpl extends BaseService implements OrderService{
     @Override
     public OrderDetailRes getOrderDetail(Integer id) {
         User user = getUser(RoleType.ADMIN,RoleType.CUSTOMER);
-        OrderDetailRes response = orderRepository.getDetail(id);
-        return response;
+        return orderRepository.getDetail(id);
     }
 
     private OrderItem setOrderItem(CartItem cartItem) {
@@ -143,6 +150,8 @@ public class OrderServiceImpl extends BaseService implements OrderService{
                 .status(order.getStatus())
                 .city(order.getCity())
                 .street(order.getStreet())
+                .name(order.getName())
+                .note(order.getNote())
                 .build();
     }
 }

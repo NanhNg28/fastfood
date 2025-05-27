@@ -21,6 +21,11 @@ import java.util.List;
 @Table(name = "orders")
 public class Order extends BaseEntity {
 
+    @NotNull
+    String name;
+
+    String note;
+
     @Transient
     List<OrderItem> orderItems;
 

@@ -30,13 +30,13 @@ public class UserController {
         return ResponseEntity.ok(userService.updateProfileUser(request));
     }
 
-    @Operation(summary = "doi mat khau cua toi")
+    @Operation(summary = "doi mat khau cua toi")//done
     @PostMapping("v1/user/change-my-password")
     public ResponseEntity<BaseResponse<User>> userChangePassword(@Valid @RequestBody UserChangePasswordReq request){
         return ResponseEntity.ok(new BaseResponse<>(userService.changePassword(request),"change user`s password successfully"));
     }
 
-    @Operation(summary = "xoa 1 hoac nhieu user")
+    @Operation(summary = "xoa 1 hoac nhieu user")//done
     @PostMapping("v1/user/delete")
     public ResponseEntity<BaseResponse<List<Integer>>> deleteUsers(@RequestBody IdsRequest ids) {
         return ResponseEntity.ok(new BaseResponse<>(userService.deleteUsers(ids),"delete users successfully"));
@@ -49,7 +49,7 @@ public class UserController {
         return ResponseEntity.ok(new BaseResponse<>(user,"success in adding new user"));
     }
 
-    @Operation(description = "get list user")
+    @Operation(description = "admin get list user")//done
     @GetMapping(path = "v1/user/list")
     public ResponseEntity<BaseResponse<List<UserListRes>>> getListFood(@RequestParam int page,
                                                                        @RequestParam(required = false) String keyword,
@@ -63,8 +63,8 @@ public class UserController {
         return ResponseEntity.ok(new BaseResponse<>(userService.getMyProfile(),"getting my profile successfully"));
     }
 
-    @Operation(description = "get user profile")
-    @GetMapping(path = "v1/user/{id}")
+    @Operation(description = "get user profile") //done
+    @GetMapping(path = "v1/user/detail/{id}")
     public ResponseEntity<BaseResponse<User>> getUserProfile(@PathVariable("id") int userId) {
         return ResponseEntity.ok(new BaseResponse<>(userService.getUserDetail(userId),"getting user successfully"));
     }
