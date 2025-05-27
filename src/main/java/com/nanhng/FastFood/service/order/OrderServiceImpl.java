@@ -6,6 +6,8 @@ import com.nanhng.FastFood.dto.request.order.AddOrderReq;
 import com.nanhng.FastFood.dto.request.order.UpdateOrderReq;
 import com.nanhng.FastFood.dto.response.BaseResponse;
 import com.nanhng.FastFood.dto.response.order.AddOrderRes;
+import com.nanhng.FastFood.dto.response.order.OrderDetailRes;
+import com.nanhng.FastFood.dto.response.order.OrderListRes;
 import com.nanhng.FastFood.entity.address.Address;
 import com.nanhng.FastFood.entity.cart.Cart;
 import com.nanhng.FastFood.entity.cart.CartItem;
@@ -13,9 +15,9 @@ import com.nanhng.FastFood.entity.order.Order;
 import com.nanhng.FastFood.entity.order.OrderItem;
 import com.nanhng.FastFood.entity.user.User;
 import com.nanhng.FastFood.exception.LovelyException;
-import com.nanhng.FastFood.service.repository.address.AddressRepository;
-import com.nanhng.FastFood.service.repository.order.OrderRepository;
-import com.nanhng.FastFood.service.repository.orderItem.OrderItemRepository;
+import com.nanhng.FastFood.repository.address.AddressRepository;
+import com.nanhng.FastFood.repository.order.OrderRepository;
+import com.nanhng.FastFood.repository.orderItem.OrderItemRepository;
 import com.nanhng.FastFood.service.BaseService;
 import com.nanhng.FastFood.service.cart.CartService;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +48,7 @@ public class OrderServiceImpl extends BaseService implements OrderService{
             throw new LovelyException("User does not have exist address yet");
         }
         Double total = 0.0;
-        Cart cart = cartService.getCart(user.getId());
+        Cart cart = cartService.getCart();
         Order order = new Order();
         Address address = addressRepository.findById(user.getAddressId()).orElseThrow(()->new LovelyException("User does not have exist address yet"));
         order.setUserId(user.getId());
@@ -101,10 +103,28 @@ public class OrderServiceImpl extends BaseService implements OrderService{
     }
 
     @Override
-    public BaseResponse<List<Order>> getOrderList(int page, OrderStatus status) {
+    public BaseResponse<List<OrderListRes>> getOrderList(int page, OrderStatus status) {
         User user = getUser(RoleType.ADMIN,RoleType.EMPLOYEE);
 
-        return new BaseResponse<>(orderRepository.getOrderList(page,status),"find list orders successfully");
+        long count = orderRepository.countOrder(status);
+        List<OrderListRes> list = orderRepository.getOrderList(page,status);
+
+        return new BaseResponse<>(list,count,page);
+    }
+
+    @Override
+    public BaseResponse<List<OrderListRes>> getMyOrderList(int page, OrderStatus status) {
+        User user = getUser(RoleType.ADMIN,RoleType.CUSTOMER);
+        long count = orderRepository.countMyOrder(status,user.getId());
+        List<OrderListRes> list = orderRepository.getMyOrderList(page,status,user.getId());
+        return new BaseResponse<>(list,count,page);
+    }
+
+    @Override
+    public OrderDetailRes getOrderDetail(Integer id) {
+        User user = getUser(RoleType.ADMIN,RoleType.CUSTOMER);
+        OrderDetailRes response = orderRepository.getDetail(id);
+        return response;
     }
 
     private OrderItem setOrderItem(CartItem cartItem) {

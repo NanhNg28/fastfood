@@ -23,13 +23,13 @@ import java.util.List;
 public class CategoryController {
     private final CategoryService categoryService;
 
-    @Operation(description = "add new category") //done
+    @Operation(description = "admin add new category") //done
     @PostMapping("v1/category/add")
     public ResponseEntity<BaseResponse<Category>> addCategory(@Valid @RequestBody AddCategoryReq request) {
         return ResponseEntity.ok(new BaseResponse<>(categoryService.addCategory(request),"add category successfully"));
     }
 
-    @Operation(description = "update category")//done
+    @Operation(description = "admin update category")//done
     @PostMapping("v1/category/update")
     public ResponseEntity<BaseResponse<Category>> updateCategory(@RequestBody @Valid UpdateCategoryReq request) {
         return ResponseEntity.ok(new BaseResponse<>(categoryService.updateCategory(request),"update category successfully"));
@@ -49,7 +49,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getAllCategory(page,searchKeyword,status));
     }
 
-    @Operation(description = "delete category")//done
+    @Operation(description = "admin delete category")//done
     @PostMapping("v1/category/delete")
     public ResponseEntity<BaseResponse<List<Integer>>> deleteCategory(@Valid @RequestBody IdsRequest ids) {
         return ResponseEntity.ok(new BaseResponse<>(categoryService.deleteCategory(ids),"delete category successfully"));

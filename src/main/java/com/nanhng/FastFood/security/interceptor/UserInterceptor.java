@@ -1,7 +1,7 @@
 package com.nanhng.FastFood.security.interceptor;
 
 import com.nanhng.FastFood.entity.user.User;
-import com.nanhng.FastFood.service.repository.user.UserRepository;
+import com.nanhng.FastFood.repository.user.UserRepository;
 import com.nanhng.FastFood.security.JwtToKenProvider;
 import com.nanhng.FastFood.security.SecurityContexts;
 import jakarta.servlet.http.HttpServletRequest;

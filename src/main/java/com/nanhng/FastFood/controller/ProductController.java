@@ -25,13 +25,13 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
-    @Operation(description = "add new food item")//done
+    @Operation(description = "admin add new food item")//done
     @PostMapping(path = "/v1/food/add")
     public ResponseEntity<Product> addFood(@Valid @RequestBody AddProductReq request) {
         return ResponseEntity.ok(productService.addProduct(request));
     }
 
-    @Operation(description = "update exist food item")//done
+    @Operation(description = "admin update exist food item")//done
     @PostMapping(path = "v1/food/update")
     public ResponseEntity<ProductDetailRes> updateFood(@Valid @RequestBody UpdateProductReq request) {
         return ResponseEntity.ok(productService.updateProduct(request));
@@ -51,7 +51,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getListProduct(page,keyword,status));
     }
 
-    @Operation(description = "delete food")//done
+    @Operation(description = "admin delete food")//done
     @PostMapping(path = "v1/food/delete")
     public ResponseEntity<BaseResponse<List<Integer>>> deleteFood(@Valid @RequestBody IdsRequest request) {
         return ResponseEntity.ok(new BaseResponse<>(productService.deleteProductByIds(request),"delete successfully"));

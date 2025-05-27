@@ -22,7 +22,7 @@ import java.util.List;
 public class Order extends BaseEntity {
 
     @Transient
-    List<OrderItem> orderItems = new ArrayList<>();
+    List<OrderItem> orderItems;
 
     @Column(name = "total_price")
     Double totalPrice = 0.0;

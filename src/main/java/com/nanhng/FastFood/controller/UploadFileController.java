@@ -26,7 +26,7 @@ public class UploadFileController {
     private final ProductService productService;
     private final CategoryService categoryService;
 
-    @Operation(summary = "add product image")//done
+    @Operation(summary = "admin add product image")//done
     @PostMapping("api/v1/food/upload-image")
     public ResponseEntity<UploadFile> uploadProductImage(@RequestParam("file") final MultipartFile file, @RequestParam("productId")Integer productId) {
         if (file == null) {
@@ -43,7 +43,7 @@ public class UploadFileController {
         return ResponseEntity.ok(uploadFile);
     }
 
-    @Operation(summary = "add category image") //done
+    @Operation(summary = "admin add category image") //done
     @PostMapping("api/v1/category/upload-image")
     public ResponseEntity<UploadFile> uploadCategoryImage(@RequestParam("file") final MultipartFile file, @RequestParam("categoryId")Integer categoryId) {
         if (file == null) {
@@ -60,9 +60,9 @@ public class UploadFileController {
         return ResponseEntity.ok(uploadFile);
     }
 
-    @GetMapping("image/{fileName:.+}")//done
-    public ResponseEntity<InputStreamResource> getImage(@PathVariable final String fileName) throws Exception {
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG)
-                .body(new InputStreamResource(uploadFileService.getInputStream("image/" + fileName)));
-    }
+//    @GetMapping("image/{fileName:.+}")//done
+//    public ResponseEntity<InputStreamResource> getImage(@PathVariable final String fileName) throws Exception {
+//        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG)
+//                .body(new InputStreamResource(uploadFileService.getInputStream("image/" + fileName)));
+//    }
 }

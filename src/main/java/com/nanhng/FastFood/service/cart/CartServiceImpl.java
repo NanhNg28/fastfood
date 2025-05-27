@@ -6,10 +6,10 @@ import com.nanhng.FastFood.entity.cart.Cart;
 import com.nanhng.FastFood.entity.cart.CartItem;
 import com.nanhng.FastFood.entity.user.User;
 import com.nanhng.FastFood.exception.LovelyException;
-import com.nanhng.FastFood.service.repository.cart.CartRepository;
-import com.nanhng.FastFood.service.repository.cartItem.CartItemRepository;
+import com.nanhng.FastFood.repository.cart.CartRepository;
+import com.nanhng.FastFood.repository.cartItem.CartItemRepository;
 import com.nanhng.FastFood.service.BaseService;
-import com.nanhng.FastFood.service.repository.user.UserRepository;
+import com.nanhng.FastFood.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -65,7 +65,7 @@ public class CartServiceImpl extends BaseService implements CartService {
     public Cart getCart(Integer userId) {
         User user = getUser();
 
-        Cart cart = cartRepository.findById(userId).orElse(null);
+        Cart cart = cartRepository.findByUserId(userId);
         if(cart == null) {
             throw new LovelyException("Cart not found", HttpStatus.BAD_REQUEST);
         }

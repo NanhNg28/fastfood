@@ -2,7 +2,7 @@ package com.nanhng.FastFood.service.otp;
 
 import com.nanhng.FastFood.dto.request.otp.SendOtpReq;
 import com.nanhng.FastFood.dto.response.otp.SendOtpRes;
-import com.nanhng.FastFood.service.repository.otp.OtpRepository;
+import com.nanhng.FastFood.repository.otp.OtpRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
