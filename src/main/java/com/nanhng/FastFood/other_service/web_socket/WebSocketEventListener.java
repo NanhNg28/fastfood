@@ -14,7 +14,7 @@ public class WebSocketEventListener {
 
     private final SimpMessageSendingOperations messagingTemplate;
 
-    @EventListener
+    @EventListener(AddOrderRes.class)
     public void notifyNewOrder(AddOrderRes event){
         log.info("New order {} received", event.getId());
         ChatMessage message = ChatMessage.builder()

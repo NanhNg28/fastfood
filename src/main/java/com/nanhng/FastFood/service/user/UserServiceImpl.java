@@ -8,11 +8,9 @@ import com.nanhng.FastFood.dto.request.user.UserChangePasswordReq;
 import com.nanhng.FastFood.dto.request.user.UserLoginReq;
 import com.nanhng.FastFood.dto.request.user.UserRegisterReq;
 import com.nanhng.FastFood.dto.response.BaseResponse;
-import com.nanhng.FastFood.dto.response.product.ProductRes;
 import com.nanhng.FastFood.dto.response.user.UserDetailRes;
 import com.nanhng.FastFood.dto.response.user.UserListRes;
 import com.nanhng.FastFood.entity.address.Address;
-import com.nanhng.FastFood.entity.cart.CartItem;
 import com.nanhng.FastFood.entity.user.User;
 import com.nanhng.FastFood.exception.LovelyException;
 import com.nanhng.FastFood.repository.address.AddressRepository;
@@ -53,7 +51,7 @@ public class UserServiceImpl extends BaseService implements UserService {
                 .phone(request.getPhone())
                 .email(request.getEmail())
                 .status(ActiveStatus.ACTIVE)
-                .role(request.getRole())
+                .role(RoleType.CUSTOMER)
                 .deleted(false)
                 .build();
         Address address = Address.builder()
@@ -76,6 +74,7 @@ public class UserServiceImpl extends BaseService implements UserService {
             throw new LovelyException("account not active", HttpStatus.UNAUTHORIZED);
         }
         return UserDetailRes.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .phone(user.getPhone())
                 .email(user.getEmail())
@@ -93,24 +92,26 @@ public class UserServiceImpl extends BaseService implements UserService {
         if(userRepository.existsUserByPhone(request.getPhone())){
             throw new LovelyException("phone number already in use", HttpStatus.BAD_REQUEST);
         }
-        User user = User.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .phone(request.getPhone())
-                .email(request.getEmail())
-                .status(ActiveStatus.ACTIVE)
-                .role(request.getRole())
-                .deleted(false)
-                .build();
-        userRepository.save(user);
         Address address = Address.builder()
                 .city(request.getCity())
                 .street(request.getStreet())
                 .status(ActiveStatus.ACTIVE)
                 .build();
         addressRepository.save(address);
+        User user = User.builder()
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .phone(request.getPhone())
+                .email(request.getEmail())
+                .status(ActiveStatus.ACTIVE)
+                .role(RoleType.CUSTOMER)
+                .deleted(false)
+                .addressId(address.getId())
+                .build();
+        userRepository.save(user);
 
         return UserDetailRes.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .phone(user.getPhone())
                 .email(user.getEmail())
@@ -118,6 +119,7 @@ public class UserServiceImpl extends BaseService implements UserService {
                 .role(user.getRole())
                 .city(address.getCity())
                 .street(address.getStreet())
+                .addressId(address.getId())
                 .authToken(jwtToKenProvider.generateToken(user.getId()))
                 .build();
     }
@@ -149,10 +151,13 @@ public class UserServiceImpl extends BaseService implements UserService {
     public User changePassword(UserChangePasswordReq request) {
         User user = getUser();
         if(request.getUserId()!=user.getId()){
-            throw new LovelyException("Can not change password of other user", HttpStatus.UNAUTHORIZED);
+            throw new LovelyException(" Không có quyền thay đổi mật khẩu", HttpStatus.UNAUTHORIZED);
         }
         if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword())){
-            throw new LovelyException("Old password incorrect", HttpStatus.BAD_REQUEST);
+            throw new LovelyException("sai mật khẩu cũ", HttpStatus.BAD_REQUEST);
+        }
+        if(request.getOldPassword().equals(request.getNewPassword())){
+            throw new LovelyException("Hãy nhập mậy khẩu khác mật khẩu cũ", HttpStatus.BAD_REQUEST);
         }
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         return userRepository.save(user);
@@ -160,34 +165,34 @@ public class UserServiceImpl extends BaseService implements UserService {
 
     @Override
     public BaseResponse<List<UserListRes>> getListUser(int page, String keyword, ActiveStatus status) {
+        User user = getUser(RoleType.ADMIN);
+
         long record = userRepository.totalRecord(keyword,status);
         List<UserListRes> list =  userRepository.getAllProduct(page,keyword,status);
         return new BaseResponse<>(list,record,page);
     }
 
     @Override
-    public UserDetailRes getMyProfile() {
+    public User getMyProfile() {
         User user = getUser();
 
-        return getUserDetailRes(user);
+        return user;
     }
 
     @Override
-    public UserDetailRes getUserDetail(int id) {
+    public User getUserDetail(int id) {
         User user = getUser(RoleType.ADMIN);
-        log.info(String.valueOf(id));
 
         User userFound = userRepository.findById(id).orElse(null);
         if(userFound == null){
             throw new LovelyException("user not found", HttpStatus.NOT_FOUND);
         }
-        return getUserDetailRes(userFound);
+        return userFound;
     }
 
     private UserDetailRes getUserDetailRes(User user){
-
-
         UserDetailRes userDetailRes = UserDetailRes.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .phone(user.getPhone())
                 .email(user.getEmail())

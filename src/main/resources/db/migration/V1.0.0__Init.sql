@@ -2,7 +2,7 @@ CREATE TABLE `address` (
                            `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT,
                            `city`       VARCHAR(255) NOT NULL COMMENT 'Thành phố',
                            `street`     VARCHAR(255) NOT NULL COMMENT 'Đường phố',
-                           `status`     bit         NOT NULL DEFAULT 1 COMMENT 'Trạng thái: 0 - INACTIVE, 1 - ACTIVE',
+                           `status`     TINYINT         NOT NULL DEFAULT 1 COMMENT 'Trạng thái: 0 - INACTIVE, 1 - ACTIVE',
                            `deleted`    bit       NOT NULL DEFAULT 0 COMMENT 'Trạng thái xóa: 0 - Chưa xóa, 1 - Đã xóa',
                            `created_at` timestamp COMMENT 'Thời gian tạo',
                            `updated_at` timestamp COMMENT 'Thời gian cập nhật',
@@ -17,7 +17,7 @@ CREATE TABLE `user` (
                         `password`   VARCHAR(255) NOT NULL COMMENT 'Mật khẩu',
                         `email`      VARCHAR(255) DEFAULT NULL COMMENT 'Email người dùng',
                         `phone`      VARCHAR(20)  NOT NULL COMMENT 'Số điện thoại',
-                        `status`     BIT          NOT NULL DEFAULT 1 COMMENT 'Trạng thái: 0 - INACTIVE, 1 - ACTIVE',
+                        `status`     TINYINT          NOT NULL DEFAULT 1 COMMENT 'Trạng thái: 0 - INACTIVE, 1 - ACTIVE',
                         `role`       INT          NOT NULL COMMENT 'Vai trò: 0 - ADMIN, 1 - USER, 2 - Shipper',
                         `address_id` INT UNSIGNED DEFAULT NULL COMMENT 'Địa chỉ của người dùng',
                         `deleted`    BIT          NOT NULL DEFAULT 0 COMMENT 'Trạng thái xóa: 0 - Chưa xóa, 1 - Đã xóa',
@@ -35,7 +35,7 @@ CREATE TABLE `category` (
                             `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT,
                             `name`        VARCHAR(255) NOT NULL COMMENT 'Tên thể loại',
                             `description` VARCHAR(255) DEFAULT NULL COMMENT 'Mô tả thể loại',
-                            `status`      BIT NOT NULL DEFAULT 1 COMMENT 'Trạng thái: 0 - INACTIVE, 1 - ACTIVE',
+                            `status`      TINYINT NOT NULL DEFAULT 1 COMMENT 'Trạng thái: 0 - INACTIVE, 1 - ACTIVE',
                             `deleted`     BIT NOT NULL DEFAULT 0 COMMENT 'Trạng thái xóa: 0 - Chưa xóa, 1 - Đã xóa',
                             `created_at`  TIMESTAMP COMMENT 'Thời gian tạo',
                             `updated_at`  TIMESTAMP COMMENT 'Thời gian cập nhật',
@@ -52,7 +52,7 @@ CREATE TABLE `product` (
                            `quantity`         INT NOT NULL DEFAULT 0 COMMENT 'Số lượng sản phẩm',
                            `short_description` VARCHAR(255) DEFAULT NULL COMMENT 'Mô tả ngắn',
                            `long_description` TEXT DEFAULT NULL COMMENT 'Mô tả chi tiết',
-                           `status`           BIT NOT NULL DEFAULT 1 COMMENT 'Trạng thái: 0 - INACTIVE, 1 - ACTIVE',
+                           `status`           TINYINT NOT NULL DEFAULT 1 COMMENT 'Trạng thái: 0 - INACTIVE, 1 - ACTIVE',
                            `deleted`          BIT NOT NULL DEFAULT 0 COMMENT 'Trạng thái xóa: 0 - Chưa xóa, 1 - Đã xóa',
                            `created_at`       TIMESTAMP COMMENT 'Thời gian tạo',
                            `updated_at`       TIMESTAMP COMMENT 'Thời gian cập nhật',
@@ -74,6 +74,7 @@ CREATE TABLE `cart` (
 CREATE TABLE `cart_item` (
                              `id`           INT UNSIGNED NOT NULL AUTO_INCREMENT,
                              `quantity`     INT NOT NULL DEFAULT 1 COMMENT 'Số lượng sản phẩm trong giỏ',
+                             `price`        DOUBLE UNSIGNED,
                              `cart_id`      INT UNSIGNED NOT NULL COMMENT 'ID giỏ hàng',
                              `product_id`   INT UNSIGNED NOT NULL COMMENT 'ID sản phẩm',
                              PRIMARY KEY (`id`),
@@ -113,6 +114,10 @@ CREATE TABLE `order_item` (
 ) ENGINE = InnoDB COMMENT 'Sản phẩm trong đơn hàng'
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
+
+INSERT INTO `user` (username, password, email, phone, status, role, address_id, deleted, created_at, updated_at)
+VALUES ('admin', '$2a$10$90oddm68E7vWuBmnyv/ecu2yjNXlaYq9C0QHOBXQ93/2xEDX4J.iq', 'admin@gmail.com', '0123456789', 1, 0, NULL, FALSE, NOW(), NOW());
+
 
 
 

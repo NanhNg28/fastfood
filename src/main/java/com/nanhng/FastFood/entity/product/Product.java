@@ -38,6 +38,6 @@ public class Product extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     Category category;
 
-
-    String imagePath;
+    @Column(name = "image_id")
+    Integer imageId;
 }

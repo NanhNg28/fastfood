@@ -35,7 +35,9 @@ public class CartItemServiceImpl extends BaseService implements CartItemService 
         Cart cart = cartRepository.findByUserId(user.getId());
         Product product = productRepository.findById(request.getProductId()).orElseThrow(()->new LovelyException("Product not found",HttpStatus.BAD_REQUEST));
         if(cartItemRepository.existsCartItemByProductId(request.getProductId())) {
-            throw new LovelyException("Product already exists",HttpStatus.BAD_REQUEST);
+            CartItem cartItem = cartItemRepository.getCartItemByProductId(request.getProductId());
+            cartItem.setQuantity(cartItem.getQuantity() + request.getQuantity());
+            return cartItemRepository.save(cartItem);
         }
         CartItem cartItem = new CartItem();
         cartItem.setCartId(cart.getId());

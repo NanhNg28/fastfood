@@ -8,7 +8,7 @@ import com.nanhng.FastFood.dto.request.product.UpdateProductReq;
 import com.nanhng.FastFood.dto.response.BaseResponse;
 import com.nanhng.FastFood.dto.response.product.AddProductImageRes;
 import com.nanhng.FastFood.dto.response.product.ProductDetailRes;
-import com.nanhng.FastFood.dto.response.product.ProductRes;
+import com.nanhng.FastFood.dto.response.product.ProductListRes;
 import com.nanhng.FastFood.entity.product.Product;
 
 import java.util.List;
@@ -17,9 +17,9 @@ public interface ProductService {
     Product addProduct(AddProductReq request);
     ProductDetailRes updateProduct(UpdateProductReq request);
     ProductDetailRes getDetailProduct(int id);
-    BaseResponse<List<ProductRes>> getListProduct(int page, String keyword, ActiveStatus status);
+    BaseResponse<List<ProductListRes>> getListProduct(int page, String keyword, ActiveStatus status);
     List<Integer> deleteProductByIds(IdsRequest request);
-    List<ProductRes> getListProductByCategory(int CategoryId, int page);
-    AddProductImageRes addImagePath(AddProductImageReq request);
+    BaseResponse<List<ProductListRes>> getListProductByCategory(int CategoryId, int page);
+    AddProductImageRes addImageId(AddProductImageReq request);
 
 }

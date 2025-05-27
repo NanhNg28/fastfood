@@ -1,5 +1,6 @@
 package com.nanhng.FastFood.dto.request.user;
 
+import jakarta.validation.constraints.AssertTrue;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +17,11 @@ public class UserChangePasswordReq {
     String oldPassword;
     @NotNull
     String newPassword;
+    @NotNull
+    String confirmPassword;
+
+    @AssertTrue(message = " mật khẩu và mật khẩu xác nhận phải giống nhau")
+    public boolean isPasswordMatch() {
+        return newPassword.equals(confirmPassword);
+    }
 }

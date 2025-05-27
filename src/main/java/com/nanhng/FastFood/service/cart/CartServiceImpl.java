@@ -1,6 +1,5 @@
 package com.nanhng.FastFood.service.cart;
 
-import com.nanhng.FastFood.dto.constant.RoleType;
 import com.nanhng.FastFood.dto.request.cart.AddCartReq;
 import com.nanhng.FastFood.dto.request.cart.CartDetailReq;
 import com.nanhng.FastFood.entity.cart.Cart;
@@ -10,6 +9,7 @@ import com.nanhng.FastFood.exception.LovelyException;
 import com.nanhng.FastFood.repository.cart.CartRepository;
 import com.nanhng.FastFood.repository.cartItem.CartItemRepository;
 import com.nanhng.FastFood.service.BaseService;
+import com.nanhng.FastFood.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +23,7 @@ import java.util.List;
 public class CartServiceImpl extends BaseService implements CartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final UserRepository userRepository;
     @Override
     public Cart addCart(AddCartReq request) {
         User user = getUser();
@@ -33,6 +34,20 @@ public class CartServiceImpl extends BaseService implements CartService {
         Cart cart = new Cart();
         cart.setUserId(user.getId());
         return cartRepository.save(cart);
+    }
+
+    @Override
+    public void addCart(Integer userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if(user == null || user.isDeleted()) {
+            throw new LovelyException("user not exists", HttpStatus.BAD_REQUEST);
+        }
+        if(cartRepository.existsCartByUserId(user.getId())) {
+            throw new LovelyException("cart already exists", HttpStatus.BAD_REQUEST);
+        }
+        Cart cart = new Cart();
+        cart.setUserId(user.getId());
+        cartRepository.save(cart);
     }
 
     @Override
@@ -50,7 +65,7 @@ public class CartServiceImpl extends BaseService implements CartService {
     public Cart getCart(Integer userId) {
         User user = getUser();
 
-        Cart cart = cartRepository.findById(userId).orElse(null);
+        Cart cart = cartRepository.findByUserId(userId);
         if(cart == null) {
             throw new LovelyException("Cart not found", HttpStatus.BAD_REQUEST);
         }
@@ -67,7 +82,7 @@ public class CartServiceImpl extends BaseService implements CartService {
         if(cart == null) {
             throw new LovelyException("Cart not found", HttpStatus.BAD_REQUEST);
         }
-        cart.setCartItems(cartItemRepository.findAllByCartId(user.getId()));
+        cart.setCartItems(cartItemRepository.findAllByCartId(cart.getId()));
         cart.setTotalPrice(calculateTotalPrice(cart.getCartItems()));
         return cart;
     }

@@ -19,4 +19,6 @@ public class AddOrderRes {
     OrderStatus status;
     String city;
     String street;
+    String name;
+    String note;
 }

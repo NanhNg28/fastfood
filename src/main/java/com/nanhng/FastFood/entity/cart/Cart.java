@@ -1,5 +1,6 @@
 package com.nanhng.FastFood.entity.cart;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.constant.PaymentStatus;
@@ -28,6 +29,7 @@ public class Cart{
     @Column(name = "user_id")
     Integer userId;
 
+    @JsonIgnore
     @JoinColumn(name = "user_id",insertable=false,updatable=false)
     @OneToOne
     User user;

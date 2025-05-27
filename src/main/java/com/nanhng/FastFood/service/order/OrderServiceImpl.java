@@ -6,6 +6,8 @@ import com.nanhng.FastFood.dto.request.order.AddOrderReq;
 import com.nanhng.FastFood.dto.request.order.UpdateOrderReq;
 import com.nanhng.FastFood.dto.response.BaseResponse;
 import com.nanhng.FastFood.dto.response.order.AddOrderRes;
+import com.nanhng.FastFood.dto.response.order.OrderDetailRes;
+import com.nanhng.FastFood.dto.response.order.OrderListRes;
 import com.nanhng.FastFood.entity.address.Address;
 import com.nanhng.FastFood.entity.cart.Cart;
 import com.nanhng.FastFood.entity.cart.CartItem;
@@ -13,7 +15,6 @@ import com.nanhng.FastFood.entity.order.Order;
 import com.nanhng.FastFood.entity.order.OrderItem;
 import com.nanhng.FastFood.entity.user.User;
 import com.nanhng.FastFood.exception.LovelyException;
-import com.nanhng.FastFood.other_service.web_socket.WebSocketEventListener;
 import com.nanhng.FastFood.repository.address.AddressRepository;
 import com.nanhng.FastFood.repository.order.OrderRepository;
 import com.nanhng.FastFood.repository.orderItem.OrderItemRepository;
@@ -25,7 +26,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -48,10 +48,12 @@ public class OrderServiceImpl extends BaseService implements OrderService{
             throw new LovelyException("User does not have exist address yet");
         }
         Double total = 0.0;
-        Cart cart = cartService.getCart(user.getId());
+        Cart cart = cartService.getCart();
         Order order = new Order();
         Address address = addressRepository.findById(user.getAddressId()).orElseThrow(()->new LovelyException("User does not have exist address yet"));
         order.setUserId(user.getId());
+        order.setName(request.getName());
+        order.setNote(request.getNote());
         order.setStreet(address.getStreet());
         order.setCity(address.getCity());
         order.setStatus(OrderStatus.PENDING);
@@ -86,11 +88,17 @@ public class OrderServiceImpl extends BaseService implements OrderService{
         if(request.getStatus() != null) {
             order.setStatus(request.getStatus());
         }
-        if(request.getCity()!= null) {
+        if(request.getCity()!= null && !request.getCity().isBlank()) {
             order.setCity(request.getCity());
         }
-        if(request.getStreet() != null) {
+        if(request.getStreet() != null && !request.getStreet().isBlank()) {
             order.setStreet(request.getStreet());
+        }
+        if(request.getName() != null && !request.getName().isBlank()) {
+            order.setName(request.getName());
+        }
+        if(request.getNote() != null && !request.getNote().isBlank()) {
+            order.setNote(request.getNote());
         }
         return orderRepository.save(order);
     }
@@ -103,10 +111,27 @@ public class OrderServiceImpl extends BaseService implements OrderService{
     }
 
     @Override
-    public BaseResponse<List<Order>> getOrderList(int page, OrderStatus status) {
+    public BaseResponse<List<OrderListRes>> getOrderList(int page, OrderStatus status) {
         User user = getUser(RoleType.ADMIN,RoleType.EMPLOYEE);
 
-        return new BaseResponse<>(orderRepository.getOrderList(page,status),"find list orders successfully");
+        long count = orderRepository.countOrder(status);
+        List<OrderListRes> list = orderRepository.getOrderList(page,status);
+
+        return new BaseResponse<>(list,count,page);
+    }
+
+    @Override
+    public BaseResponse<List<OrderListRes>> getMyOrderList(int page, OrderStatus status) {
+        User user = getUser(RoleType.ADMIN,RoleType.CUSTOMER);
+        long count = orderRepository.countMyOrder(status,user.getId());
+        List<OrderListRes> list = orderRepository.getMyOrderList(page,status,user.getId());
+        return new BaseResponse<>(list,count,page);
+    }
+
+    @Override
+    public OrderDetailRes getOrderDetail(Integer id) {
+        User user = getUser(RoleType.ADMIN,RoleType.CUSTOMER);
+        return orderRepository.getDetail(id);
     }
 
     private OrderItem setOrderItem(CartItem cartItem) {
@@ -125,6 +150,8 @@ public class OrderServiceImpl extends BaseService implements OrderService{
                 .status(order.getStatus())
                 .city(order.getCity())
                 .street(order.getStreet())
+                .name(order.getName())
+                .note(order.getNote())
                 .build();
     }
 }

@@ -16,11 +16,14 @@ public class AddressServiceImpl extends BaseService implements AddressService {
 
     @Override
     public Address updateAddress(UpdateAddressRequest request) {
-        Address address = addressRepository.findById(request.getId()).orElseThrow(()->new LovelyException("Address not found", HttpStatus.BAD_REQUEST));
-        if(!request.getCity().isBlank()){
+        Address address = addressRepository.findByIdToUpdate(request.getId());
+        if(address == null){
+            throw new LovelyException("Không tìm thấy địa chỉ", HttpStatus.BAD_REQUEST);
+        }
+        if(request.getCity() !=null &&!request.getCity().isBlank()){
             address.setCity(request.getCity());
         }
-        if(!request.getStreet().isBlank()){
+        if(request.getStreet() !=null &&!request.getStreet().isBlank()){
             address.setStreet(request.getStreet());
         }
         if(request.getStatus()!= null){
@@ -31,7 +34,7 @@ public class AddressServiceImpl extends BaseService implements AddressService {
 
     @Override
     public Integer deleteAddress(Integer addressId) {
-        if(addressRepository.findById(addressId).isEmpty()){
+        if(!addressRepository.existsById(addressId)){
             throw new LovelyException("Address not found", HttpStatus.BAD_REQUEST);
         }
         addressRepository.deleteById(addressId);

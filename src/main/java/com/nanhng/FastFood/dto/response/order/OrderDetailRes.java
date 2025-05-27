@@ -1,0 +1,38 @@
+package com.nanhng.FastFood.dto.response.order;
+
+import com.nanhng.FastFood.dto.constant.OrderStatus;
+import com.nanhng.FastFood.entity.order.OrderItem;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.util.Date;
+import java.util.List;
+
+@Getter
+@Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class OrderDetailRes {
+    Integer id;
+
+    List<OrderItem> orderItems;
+
+    Integer userId;
+    OrderStatus status;
+    String city;
+    String street;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    Date updatedAt;
+
+    Double totalPrice;
+    String name;
+    String note;
+}

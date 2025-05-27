@@ -16,12 +16,13 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Category extends BaseEntity {
 
     @NotNull
     String name;
     String description;
+    @Column(name = "image_id")
+    Integer imageId;
 
     @Column(name = "status", columnDefinition = "INT")
     ActiveStatus status;

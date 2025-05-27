@@ -17,4 +17,7 @@ public class ProductDetailRes {
     int quantity;
     String shortDescription;
     String longDescription;
+
+    String thumbUrl;
+    String thumbName;
 }
