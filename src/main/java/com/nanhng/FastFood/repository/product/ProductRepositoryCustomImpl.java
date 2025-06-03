@@ -31,7 +31,7 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qProduct.deleted.eq(false));
         builder.and(qProduct.status.eq(Objects.requireNonNullElse(status, ActiveStatus.ACTIVE)));
-        if(keyword!=null &&!keyword.isBlank()){
+        if (keyword != null && !keyword.isBlank()) {
             builder.andAnyOf(qProduct.name.containsIgnoreCase(keyword));
         }
         return query.from(qProduct).leftJoin(qUploadFile).on(qProduct.imageId.eq(qUploadFile.id))
@@ -42,9 +42,9 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
                         qProduct.price,
                         qProduct.category.name.as("categoryName"),
                         qUploadFile.thumbFilePath.as("thumbUrl"),
-                        qUploadFile.thumbFileName.as("thumbName")
-                        ))
-                .offset(page*PAGE_SIZE)
+                        qUploadFile.thumbFileName.as("thumbName"),
+                        qProduct.shortDescription))
+                .offset(page * PAGE_SIZE)
                 .limit(PAGE_SIZE)
                 .fetch();
     }
@@ -54,7 +54,7 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qProduct.deleted.eq(false));
         builder.and(qProduct.status.eq(Objects.requireNonNullElse(status, ActiveStatus.ACTIVE)));
-        if(keyword!=null &&!keyword.isBlank()){
+        if (keyword != null && !keyword.isBlank()) {
             builder.andAnyOf(qProduct.name.containsIgnoreCase(keyword));
         }
 
@@ -62,7 +62,7 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
                 .where(builder)
                 .select(qProduct.id.count())
                 .fetchFirst();
-        return res==null?0:res;
+        return res == null ? 0 : res;
     }
 
     @Override
@@ -91,7 +91,7 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
 
         query.update(qProduct)
                 .where(builder)
-                .set(qProduct.deleted,true)
+                .set(qProduct.deleted, true)
                 .execute();
     }
 
@@ -106,7 +106,7 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
                 .where(builder)
                 .select(qProduct.id.count())
                 .fetchOne();
-        return count==null?0:count;
+        return count == null ? 0 : count;
     }
 
     @Override
@@ -139,7 +139,7 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
         return query().from(qProduct)
                 .where(builder)
                 .select(qProduct.id)
-                .fetchOne()!=null;
+                .fetchOne() != null;
     }
 
     @Override
@@ -151,6 +151,6 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
         return query().from(qProduct)
                 .where(builder)
                 .select(qProduct.id)
-                .fetchOne()!=null;
+                .fetchOne() != null;
     }
 }

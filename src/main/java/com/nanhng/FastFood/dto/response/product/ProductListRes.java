@@ -15,5 +15,5 @@ public class ProductListRes {
     String categoryName;
     String thumbUrl;
     String thumbName;
-
+    String shortDescription;
 }
