@@ -56,6 +56,8 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements Cate
                         qUploadFile.thumbFilePath.as("thumbUrl"),
                         qUploadFile.thumbFileName.as("thumbName")
                 ))
+                .offset(page*PAGE_SIZE)
+                .limit(PAGE_SIZE)
                 .fetch();
     }
 
