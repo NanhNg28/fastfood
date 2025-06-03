@@ -24,5 +24,6 @@ public class UpdateProductReq {
 
     String shortDescription;
     String longDescription;
+    Integer imageId;
 
 }

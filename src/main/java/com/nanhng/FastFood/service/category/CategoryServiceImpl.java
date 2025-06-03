@@ -36,12 +36,13 @@ public class CategoryServiceImpl extends BaseService implements CategoryService 
     public Category addCategory(AddCategoryReq request) {
         User user = getUser(RoleType.ADMIN);
 
-        if(categoryRepository.existsByName(request.getName())) {
+        if(categoryRepository.existByName(request.getName())) {
             throw new LovelyException("Danh mục đã tồn tại");
         }
         Category category = Category.builder()
                 .name(request.getName())
                 .description(request.getDescription())
+                .imageId(request.getImageId())
                 .deleted(false)
                 .status(ActiveStatus.ACTIVE)
                 .build();
@@ -52,14 +53,17 @@ public class CategoryServiceImpl extends BaseService implements CategoryService 
     public Category updateCategory(UpdateCategoryReq request) {
         User user = getUser(RoleType.ADMIN);
 
-        Category category = categoryRepository.findById(request.getId()).orElseThrow(() -> new LovelyException("category not found"));
+        Category category = categoryRepository.findByIdToUpdate(request.getId());
         if(category.isDeleted()){
             throw new LovelyException("Không tìm thấy danh mục");
         }
         if(!request.getName().isBlank()){
             category.setName(request.getName());
         }
-            category.setDescription(request.getDescription());
+        if(request.getImageId()!=null){
+            category.setImageId(request.getImageId());
+        }
+        category.setDescription(request.getDescription());
         return categoryRepository.save(category);
     }
 

@@ -13,4 +13,6 @@ public interface CategoryRepositoryCustom {
     List<Integer> getExistIds(List<Integer> ids);
     long countRecord (String keyword, ActiveStatus status);
     Boolean existById(Integer id);
+    Category findByIdToUpdate(Integer id);
+    boolean existByName(String categoryName);
 }

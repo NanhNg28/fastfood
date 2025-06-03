@@ -13,4 +13,5 @@ public class AddCategoryReq {
     @NotNull
     String name;
     String description;
+    Integer imageId;
 }

@@ -2,6 +2,7 @@ package com.nanhng.FastFood.repository.category;
 
 import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.response.category.CategoryListRes;
+import com.nanhng.FastFood.entity.category.Category;
 import com.nanhng.FastFood.entity.category.QCategory;
 import com.nanhng.FastFood.entity.upload_file.QUploadFile;
 import com.nanhng.FastFood.repository.BaseRepository;
@@ -97,5 +98,29 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements Cate
                 .where(builder)
                 .select(qCategory.id)
                 .fetchOne() != null;
+    }
+
+    @Override
+    public Category findByIdToUpdate(Integer id) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qCategory.deleted.eq(false));
+        builder.and(qCategory.id.eq(id));
+
+        return query().from(qCategory)
+                .where(builder)
+                .select(qCategory)
+                .fetchOne();
+    }
+
+    @Override
+    public boolean existByName(String categoryName) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qCategory.deleted.eq(false));
+        builder.and(qCategory.name.eq(categoryName));
+
+        return query().from(qCategory)
+                .where(builder)
+                .select(qCategory)
+                .fetchOne()!=null;
     }
 }

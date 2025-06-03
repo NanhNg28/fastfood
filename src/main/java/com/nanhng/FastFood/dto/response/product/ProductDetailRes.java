@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDetailRes {
+    Integer id;
     String name;
     Double price;
     String categoryName;
@@ -18,6 +19,7 @@ public class ProductDetailRes {
     String shortDescription;
     String longDescription;
 
+    Integer imageId;
     String thumbUrl;
     String thumbName;
 }

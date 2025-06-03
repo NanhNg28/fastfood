@@ -15,4 +15,5 @@ public class UpdateCategoryReq{
     @NotNull
     String name;
     String description;
+    Integer imageId;
 }
