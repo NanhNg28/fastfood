@@ -31,7 +31,7 @@ public class UserRepositoryCustomImpl extends BaseRepository implements UserRepo
         JPAQueryFactory query = new JPAQueryFactory(entityManager);
         BooleanBuilder builder = new BooleanBuilder();
 //        builder.and(request)
-    return null;
+        return null;
     }
 
     @Override
@@ -54,20 +54,21 @@ public class UserRepositoryCustomImpl extends BaseRepository implements UserRepo
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qUser.deleted.eq(false));
         builder.and(qUser.status.eq(Objects.requireNonNullElse(status, ActiveStatus.ACTIVE)));
-        if(keyword!=null &&!keyword.isBlank()){
-            builder.andAnyOf(qUser.username.containsIgnoreCase(keyword),qUser.email.containsIgnoreCase(keyword));
+        if (keyword != null && !keyword.isBlank()) {
+            builder.andAnyOf(qUser.username.containsIgnoreCase(keyword), qUser.email.containsIgnoreCase(keyword));
         }
 
         return query.from(qUser)
                 .where(builder)
                 .select(Projections.fields(UserListRes.class,
-                                qUser.username,
-                                qUser.email,
-                                qUser.phone,
-                                qUser.status,
-                                qUser.role,
-                                qUser.addressId))
-                .offset(page*PAGE_SIZE)
+                        qUser.username,
+                        qUser.email,
+                        qUser.phone,
+                        qUser.status,
+                        qUser.role,
+                        qUser.addressId,
+                        qUser.id))
+                .offset(page * PAGE_SIZE)
                 .limit(PAGE_SIZE)
                 .fetch();
     }
@@ -77,14 +78,14 @@ public class UserRepositoryCustomImpl extends BaseRepository implements UserRepo
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qUser.deleted.eq(false));
         builder.and(qUser.status.eq(Objects.requireNonNullElse(status, ActiveStatus.ACTIVE)));
-        if(keyword!=null &&!keyword.isBlank()){
-            builder.andAnyOf(qUser.username.containsIgnoreCase(keyword),qUser.email.containsIgnoreCase(keyword));
+        if (keyword != null && !keyword.isBlank()) {
+            builder.andAnyOf(qUser.username.containsIgnoreCase(keyword), qUser.email.containsIgnoreCase(keyword));
         }
 
         Long res = query().from(qUser)
                 .where(builder)
                 .select(qUser.id.count())
                 .fetchFirst();
-        return res==null?0:res;
+        return res == null ? 0 : res;
     }
 }

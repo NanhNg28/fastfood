@@ -17,7 +17,7 @@ import java.util.Objects;
 
 import static com.nanhng.FastFood.util.Constant.PAGE_SIZE;
 
-public class CategoryRepositoryCustomImpl extends BaseRepository implements  CategoryRepositoryCustom {
+public class CategoryRepositoryCustomImpl extends BaseRepository implements CategoryRepositoryCustom {
     QCategory qCategory = QCategory.category;
     QUploadFile qUploadFile = QUploadFile.uploadFile;
     @PersistenceContext
@@ -33,7 +33,7 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements  Cat
 
         query().update(qCategory)
                 .where(builder)
-                .set(qCategory.deleted,true)
+                .set(qCategory.deleted, true)
                 .execute();
     }
 
@@ -43,7 +43,7 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements  Cat
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qCategory.status.eq(Objects.requireNonNullElse(status, ActiveStatus.ACTIVE)));
         builder.and(qCategory.deleted.eq(false));
-        if(keyword!=null &&!keyword.isBlank()){
+        if (keyword != null && !keyword.isBlank()) {
             builder.andAnyOf(qCategory.name.containsIgnoreCase(keyword));
         }
         return query.from(qCategory).leftJoin(qUploadFile).on(qCategory.imageId.eq(qUploadFile.id))
@@ -54,8 +54,7 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements  Cat
                         qCategory.description,
                         qUploadFile.thumbFilePath.as("thumbUrl"),
                         qUploadFile.thumbFileName.as("thumbName")
-                        ))
-                .offset(PAGE_SIZE*page).limit(PAGE_SIZE)
+                ))
                 .fetch();
     }
 
@@ -77,7 +76,7 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements  Cat
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qCategory.deleted.eq(false));
         builder.and(qCategory.status.eq(Objects.requireNonNullElse(status, ActiveStatus.ACTIVE)));
-        if(keyword!=null &&!keyword.isBlank()){
+        if (keyword != null && !keyword.isBlank()) {
             builder.andAnyOf(qCategory.name.containsIgnoreCase(keyword));
         }
 
@@ -85,7 +84,7 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements  Cat
                 .where(builder)
                 .select(qCategory.id.count())
                 .fetchFirst();
-        return res==null?0:res;
+        return res == null ? 0 : res;
     }
 
     @Override
@@ -97,6 +96,6 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements  Cat
         return query().from(qCategory)
                 .where(builder)
                 .select(qCategory.id)
-                .fetchOne()!=null;
+                .fetchOne() != null;
     }
 }

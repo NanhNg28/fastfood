@@ -18,4 +18,5 @@ public class UserListRes {
     ActiveStatus status;
     RoleType role;
     Integer addressId;
+    int id;
 }

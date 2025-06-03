@@ -25,7 +25,9 @@ public class SecurityConfig  {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(cors ->cors.configure(http))
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(sm ->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers(
                                     antMatcher("/**")
