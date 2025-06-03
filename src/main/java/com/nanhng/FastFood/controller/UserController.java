@@ -2,6 +2,7 @@ package com.nanhng.FastFood.controller;
 
 import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.request.ids.IdsRequest;
+import com.nanhng.FastFood.dto.request.user.AddUserReq;
 import com.nanhng.FastFood.dto.request.user.UpdateProfileUserReq;
 import com.nanhng.FastFood.dto.request.user.UserChangePasswordReq;
 import com.nanhng.FastFood.dto.request.user.UserRegisterReq;
@@ -42,9 +43,9 @@ public class UserController {
         return ResponseEntity.ok(new BaseResponse<>(userService.deleteUsers(ids),"delete users successfully"));
     }
 
-    @Operation(description = "add new user (user, admin, employee)")
+    @Operation(description = "admin add new user (user, admin)") //done
     @PostMapping("v1/user/add")
-    public ResponseEntity<BaseResponse<User>> AddUser(@Valid @RequestBody UserRegisterReq request){
+    public ResponseEntity<BaseResponse<User>> AddUser(@Valid @RequestBody AddUserReq request){
         User user = userService.addUser(request);
         return ResponseEntity.ok(new BaseResponse<>(user,"success in adding new user"));
     }
@@ -60,7 +61,7 @@ public class UserController {
     @Operation(description = "get my profile")
     @GetMapping(path = "v1/user/my-profile") //done
     public ResponseEntity<BaseResponse<User>> getMyProfile() {
-        return ResponseEntity.ok(new BaseResponse<>(userService.getMyProfile(),"getting my profile successfully"));
+        return ResponseEntity.ok(new BaseResponse<>(userService.getMyProfile(),"Thành công"));
     }
 
     @Operation(description = "get user profile") //done
