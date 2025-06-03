@@ -39,13 +39,13 @@ public class BannerServiceImpl extends BaseService implements BannerService {
         User user = getUser(RoleType.ADMIN);
 
         Banner banner = bannerRepository.findByIdToUpdate(request.getId());
-        if(banner == null) {
+        if (banner == null) {
             throw new LovelyException("Không tìm thấy danh mục", HttpStatus.NOT_FOUND);
         }
-        if(request.getImageId() != null) {
+        if (request.getImageId() != null) {
             banner.setImageId(request.getImageId());
         }
-        if(request.getLink() != null && !request.getLink().isEmpty()) {
+        if (request.getLink() != null && !request.getLink().isEmpty()) {
             banner.setLink(request.getLink());
         }
         return bannerRepository.save(banner);
@@ -56,7 +56,7 @@ public class BannerServiceImpl extends BaseService implements BannerService {
         List<Integer> ids = request.getIds();
         List<Integer> existIds = bannerRepository.getExistIds(ids);
         List<Integer> notExistId = ids.stream().filter(id -> !existIds.contains(id)).toList();
-        if(!notExistId.isEmpty()) {
+        if (!notExistId.isEmpty()) {
             throw new LovelyException("Không tìm thấy id");
         }
         bannerRepository.deleteByIds(ids);
@@ -64,9 +64,8 @@ public class BannerServiceImpl extends BaseService implements BannerService {
     }
 
     @Override
-    public BaseResponse<List<Banner>> getList(int page) {
-        long count = bannerRepository.countRecord();
-        List<Banner> list = bannerRepository.getList(page);
-        return new BaseResponse<>(list,count,page);
+    public BaseResponse<List<Banner>> getList() {
+        List<Banner> list = bannerRepository.getList();
+        return new BaseResponse<>(list);
     }
 }

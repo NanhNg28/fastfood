@@ -12,5 +12,5 @@ public interface BannerService {
     Banner add (AddBannerReq request);
     Banner update (UpdateBannerReq request);
     List<Integer> delete (IdsRequest request);
-    BaseResponse<List<Banner>> getList(int page);
+    BaseResponse<List<Banner>> getList();
 }

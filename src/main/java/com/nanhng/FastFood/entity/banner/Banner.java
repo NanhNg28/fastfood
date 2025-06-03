@@ -2,7 +2,9 @@ package com.nanhng.FastFood.entity.banner;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.nanhng.FastFood.entity.BaseEntity;
+import com.nanhng.FastFood.entity.upload_file.UploadFile;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,4 +18,7 @@ import lombok.experimental.FieldDefaults;
 public class Banner extends BaseEntity {
     Integer imageId;
     String link;
+
+    @Transient
+    UploadFile image;
 }

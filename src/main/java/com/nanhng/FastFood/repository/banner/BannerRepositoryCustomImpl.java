@@ -1,17 +1,14 @@
 package com.nanhng.FastFood.repository.banner;
 
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
-import com.nanhng.FastFood.dto.response.category.CategoryListRes;
 import com.nanhng.FastFood.entity.banner.Banner;
 import com.nanhng.FastFood.entity.banner.QBanner;
+import com.nanhng.FastFood.entity.upload_file.QUploadFile;
 import com.nanhng.FastFood.repository.BaseRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.nanhng.FastFood.util.Constant.PAGE_SIZE;
 
@@ -69,14 +66,15 @@ public class BannerRepositoryCustomImpl extends BaseRepository implements Banner
     }
 
     @Override
-    public List<Banner> getList(int page) {
-        BooleanBuilder builder = new BooleanBuilder();
-        builder.and(qBanner.deleted.eq(false));
+    public List<Banner> getList() {
+        QUploadFile qUploadFile = QUploadFile.uploadFile;
 
         return query().from(qBanner)
-                .where(builder)
-                .select(qBanner)
-                .offset(page*PAGE_SIZE)
+                .innerJoin(qUploadFile).on(qUploadFile.id.eq(qBanner.imageId))
+                .where(qBanner.deleted.eq(false))
+                .select(Projections.fields(Banner.class, qBanner.id,
+                        qBanner.link, qBanner.imageId,
+                        qUploadFile.as("image")))
                 .limit(PAGE_SIZE)
                 .fetch();
     }

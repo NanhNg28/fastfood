@@ -1,14 +1,10 @@
 package com.nanhng.FastFood.controller;
 
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.request.banner.AddBannerReq;
 import com.nanhng.FastFood.dto.request.banner.UpdateBannerReq;
-import com.nanhng.FastFood.dto.request.category.AddCategoryReq;
 import com.nanhng.FastFood.dto.request.ids.IdsRequest;
 import com.nanhng.FastFood.dto.response.BaseResponse;
-import com.nanhng.FastFood.dto.response.category.CategoryListRes;
 import com.nanhng.FastFood.entity.banner.Banner;
-import com.nanhng.FastFood.entity.category.Category;
 import com.nanhng.FastFood.service.banner.BannerService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -45,8 +41,7 @@ public class BannerController {
 
     @Operation(description = "get list banner")
     @GetMapping("v1/banner/list")
-    public ResponseEntity<BaseResponse<List<Banner>>> getAllCategory(@RequestParam int page) {
-        return ResponseEntity.ok(bannerService.getList(page));
+    public ResponseEntity<BaseResponse<List<Banner>>> getAllCategory() {
+        return ResponseEntity.ok(bannerService.getList());
     }
-
 }

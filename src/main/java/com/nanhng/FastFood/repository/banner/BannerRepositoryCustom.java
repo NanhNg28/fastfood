@@ -9,5 +9,5 @@ public interface BannerRepositoryCustom {
     List<Integer> getExistIds(List<Integer> ids);
     void deleteByIds(List<Integer> ids);
     long countRecord();
-    List<Banner> getList(int page);
+    List<Banner> getList();
 }
