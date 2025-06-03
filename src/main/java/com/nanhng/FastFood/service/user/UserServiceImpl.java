@@ -3,10 +3,7 @@ package com.nanhng.FastFood.service.user;
 import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.constant.RoleType;
 import com.nanhng.FastFood.dto.request.ids.IdsRequest;
-import com.nanhng.FastFood.dto.request.user.UpdateProfileUserReq;
-import com.nanhng.FastFood.dto.request.user.UserChangePasswordReq;
-import com.nanhng.FastFood.dto.request.user.UserLoginReq;
-import com.nanhng.FastFood.dto.request.user.UserRegisterReq;
+import com.nanhng.FastFood.dto.request.user.*;
 import com.nanhng.FastFood.dto.response.BaseResponse;
 import com.nanhng.FastFood.dto.response.user.UserDetailRes;
 import com.nanhng.FastFood.dto.response.user.UserListRes;
@@ -37,7 +34,7 @@ public class UserServiceImpl extends BaseService implements UserService {
     private final JwtToKenProvider jwtToKenProvider;
 
     @Override
-    public User addUser(UserRegisterReq request) {
+    public User addUser(AddUserReq request) {
 
         if(userRepository.existsUserByUsername(request.getUsername())){
             throw new LovelyException("username already exist", HttpStatus.BAD_REQUEST);
@@ -54,12 +51,22 @@ public class UserServiceImpl extends BaseService implements UserService {
                 .role(RoleType.CUSTOMER)
                 .deleted(false)
                 .build();
-        Address address = Address.builder()
-                .city(request.getCity())
-                .street(request.getStreet())
-                .status(ActiveStatus.ACTIVE)
-                .build();
-        addressRepository.save(address);
+        if(request.getRole() == null){
+            user.setRole(RoleType.CUSTOMER);
+        }
+        else {
+            user.setRole(request.getRole());
+        }
+
+        if(request.getCity()!=null && request.getStreet()!=null) {
+            Address address = Address.builder()
+                    .city(request.getCity())
+                    .street(request.getStreet())
+                    .status(ActiveStatus.ACTIVE)
+                    .build();
+            addressRepository.save(address);
+            user.setAddressId(address.getId());
+        }
         return userRepository.save(user);
     }
 

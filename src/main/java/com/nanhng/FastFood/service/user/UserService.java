@@ -3,10 +3,7 @@ package com.nanhng.FastFood.service.user;
 import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.request.ids.IdsRequest;
 import com.nanhng.FastFood.dto.request.otp.SendOtpReq;
-import com.nanhng.FastFood.dto.request.user.UpdateProfileUserReq;
-import com.nanhng.FastFood.dto.request.user.UserChangePasswordReq;
-import com.nanhng.FastFood.dto.request.user.UserLoginReq;
-import com.nanhng.FastFood.dto.request.user.UserRegisterReq;
+import com.nanhng.FastFood.dto.request.user.*;
 import com.nanhng.FastFood.dto.response.BaseResponse;
 import com.nanhng.FastFood.dto.response.otp.SendOtpRes;
 import com.nanhng.FastFood.dto.response.user.UserDetailRes;
@@ -16,7 +13,7 @@ import com.nanhng.FastFood.entity.user.User;
 import java.util.List;
 
 public interface UserService {
-    User addUser(UserRegisterReq req);
+    User addUser(AddUserReq req);
 
     UserDetailRes loginUser(UserLoginReq request);
 
