@@ -1,15 +1,12 @@
 package com.nanhng.FastFood.controller;
 
-import com.nanhng.FastFood.dto.request.category.AddCategoryImageReq;
-import com.nanhng.FastFood.dto.request.product.AddProductImageReq;
+import com.nanhng.FastFood.dto.response.BaseResponse;
 import com.nanhng.FastFood.entity.upload_file.UploadFile;
 import com.nanhng.FastFood.exception.LovelyException;
-import com.nanhng.FastFood.service.category.CategoryService;
-import com.nanhng.FastFood.service.product.ProductService;
 import com.nanhng.FastFood.service.upload_file.UploadFileService;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,14 +14,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping("/")
 @RequiredArgsConstructor
 public class UploadFileController {
     private final UploadFileService uploadFileService;
-    private final ProductService productService;
-    private final CategoryService categoryService;
+
+    @Value("system.backend.url")
+    private String BACKEND_URL;
 
 //    @Operation(summary = "admin add product image")//done
 //    @PostMapping("api/v1/food/upload-image")
@@ -60,9 +61,8 @@ public class UploadFileController {
 //        return ResponseEntity.ok(uploadFile);
 //    }
 
-    @Operation(summary = "admin add category image") //done
     @PostMapping("api/v1/media/upload-image")
-    public ResponseEntity<UploadFile> uploadCategoryImage(@RequestParam("file") final MultipartFile file) {
+    public ResponseEntity<BaseResponse<UploadFile>> uploadImage(@RequestParam("file") final MultipartFile file) {
         if (file == null) {
             throw new LovelyException("cant not upload empty image", HttpStatus.BAD_REQUEST);
         }
@@ -70,12 +70,30 @@ public class UploadFileController {
             throw new LovelyException("File size is too large, please choose file smaller than 20MB");
         }
         UploadFile uploadFile = uploadFileService.uploadImage(file);
-        return ResponseEntity.ok(uploadFile);
+        return ResponseEntity.ok(new BaseResponse<>(uploadFile));
     }
 
     @GetMapping("image/{fileName:.+}")//done
     public ResponseEntity<InputStreamResource> getImage(@PathVariable final String fileName) throws Exception {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG)
                 .body(new InputStreamResource(uploadFileService.getInputStream("image/" + fileName)));
+    }
+
+    @PostMapping("v1/file/upload-image-for-froala-editor")
+    public ResponseEntity<?> uploadImage2(@RequestParam("file") final MultipartFile file) {
+        try {
+            if (file == null) {
+                throw new LovelyException("cant not upload empty image", HttpStatus.BAD_REQUEST);
+            }
+            if (file.getSize() > 1024 * 1024 * 20) {
+                throw new Exception("File size is too large, please choose file smaller than 20MB");
+            }
+            UploadFile uploadFile = uploadFileService.uploadImage(file);
+            Map<String, String> map = new HashMap<>();
+            map.put("link", this.BACKEND_URL + "/image" + uploadFile.getOriginalFileName());
+            return ResponseEntity.ok(map);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(new BaseResponse<>(ex.getMessage()));
+        }
     }
 }

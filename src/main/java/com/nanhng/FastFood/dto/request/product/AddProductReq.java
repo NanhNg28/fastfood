@@ -26,6 +26,4 @@ public class AddProductReq {
     String shortDescription;
     String longDescription;
     Integer imageId;
-
-
 }

@@ -22,4 +22,6 @@ public class ProductDetailRes {
     Integer imageId;
     String thumbUrl;
     String thumbName;
+
+    Integer categoryId;
 }

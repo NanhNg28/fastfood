@@ -53,6 +53,7 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements Cate
                         qCategory.id,
                         qCategory.name,
                         qCategory.description,
+                        qCategory.imageId,
                         qUploadFile.thumbFilePath.as("thumbUrl"),
                         qUploadFile.thumbFileName.as("thumbName")
                 ))

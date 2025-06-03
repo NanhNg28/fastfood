@@ -26,7 +26,7 @@ public class ProductController {
     private final ProductService productService;
 
     @Operation(description = "admin add new food item")//done
-    @PostMapping(path = "/v1/food/add")
+    @PostMapping(path = "v1/food/add")
     public ResponseEntity<Product> addFood(@Valid @RequestBody AddProductReq request) {
         return ResponseEntity.ok(productService.addProduct(request));
     }
@@ -39,28 +39,28 @@ public class ProductController {
 
     @Operation(description = "get detail food") //done
     @GetMapping(path = "v1/food/detail/{id}")
-    public ResponseEntity<ProductDetailRes> getFoodDetail(@PathVariable int id) {
-        return ResponseEntity.ok(productService.getDetailProduct(id));
+    public ResponseEntity<BaseResponse<ProductDetailRes>> getFoodDetail(@PathVariable int id) {
+        return ResponseEntity.ok(new BaseResponse<>(productService.getDetailProduct(id)));
     }
 
     @Operation(description = "get list food") //done
     @GetMapping(path = "v1/food/list")
     public ResponseEntity<BaseResponse<List<ProductListRes>>> getListFood(@RequestParam int page,
                                                                           @RequestParam(required = false) String keyword,
-                                                                          @RequestParam(required = false)ActiveStatus status) {
-        return ResponseEntity.ok(productService.getListProduct(page,keyword,status));
+                                                                          @RequestParam(required = false) ActiveStatus status) {
+        return ResponseEntity.ok(productService.getListProduct(page, keyword, status));
     }
 
     @Operation(description = "admin delete food")//done
     @PostMapping(path = "v1/food/delete")
     public ResponseEntity<BaseResponse<List<Integer>>> deleteFood(@Valid @RequestBody IdsRequest request) {
-        return ResponseEntity.ok(new BaseResponse<>(productService.deleteProductByIds(request),"delete successfully"));
+        return ResponseEntity.ok(new BaseResponse<>(productService.deleteProductByIds(request), "delete successfully"));
     }
 
     @Operation(description = "filter by category")//done
     @GetMapping(path = "v1/category/food")
-    public ResponseEntity<BaseResponse<List<ProductListRes>>> searchByCategory(@RequestParam(name =  "categoryId") int categoryId, @RequestParam int page) {
-        return ResponseEntity.ok(productService.getListProductByCategory(categoryId,page));
+    public ResponseEntity<BaseResponse<List<ProductListRes>>> searchByCategory(@RequestParam(name = "categoryId") int categoryId, @RequestParam int page) {
+        return ResponseEntity.ok(productService.getListProductByCategory(categoryId, page));
     }
 
 //    @Operation(description = "add product image path")
