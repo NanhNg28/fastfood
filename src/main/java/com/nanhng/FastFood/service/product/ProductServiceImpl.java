@@ -37,7 +37,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     public Product addProduct(AddProductReq request) {
         User user = getUser(RoleType.ADMIN);
 
-        if(!categoryRepository.existById(request.getCategoryId())) {
+        if (!categoryRepository.existById(request.getCategoryId())) {
             throw new LovelyException("Category not found", HttpStatus.BAD_REQUEST);
         }
         if (productRepository.existByName(request.getName())) {
@@ -61,35 +61,35 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     public ProductDetailRes updateProduct(UpdateProductReq request) {
         User user = getUser(RoleType.ADMIN);
 
-        if(!categoryRepository.existById(request.getCategoryId())) {
+        if (!categoryRepository.existById(request.getCategoryId())) {
             throw new LovelyException("Category not found", HttpStatus.BAD_REQUEST);
         }
-        if(!productRepository.existById(request.getId())) {
+        if (!productRepository.existById(request.getId())) {
             throw new LovelyException("product not found", HttpStatus.BAD_REQUEST);
         }
         Product product = productRepository.findById(request.getId()).orElse(null);
-        if(product == null) {
+        if (product == null) {
             throw new LovelyException("product not found", HttpStatus.BAD_REQUEST);
         }
-        if(request.getName() != null &&!request.getName().isBlank()){
+        if (request.getName() != null && !request.getName().isBlank()) {
             product.setName(request.getName());
         }
-        if(request.getPrice() != null){
+        if (request.getPrice() != null) {
             product.setPrice(request.getPrice());
         }
-        if(request.getCategoryId() != null){
+        if (request.getCategoryId() != null) {
             product.setCategoryId(request.getCategoryId());
         }
-        if(request.getQuantity() != null){
+        if (request.getQuantity() != null) {
             product.setQuantity(request.getQuantity());
         }
-        if(request.getShortDescription() != null &&!request.getShortDescription().isBlank()){
+        if (request.getShortDescription() != null && !request.getShortDescription().isBlank()) {
             product.setShortDescription(request.getShortDescription());
         }
-        if(request.getLongDescription() != null &&!request.getLongDescription().isBlank()){
+        if (request.getLongDescription() != null && !request.getLongDescription().isBlank()) {
             product.setLongDescription(request.getLongDescription());
         }
-        if(request.getImageId() != null){
+        if (request.getImageId() != null) {
             product.setImageId(request.getImageId());
         }
         return getProductDetailRes(productRepository.save(product));
@@ -97,16 +97,17 @@ public class ProductServiceImpl extends BaseService implements ProductService {
 
     @Override
     public ProductDetailRes getDetailProduct(int id) {
-        if(!productRepository.existById(id)) {
+        if (!productRepository.existById(id)) {
             throw new LovelyException("Không tìm thấy sản phẩm", HttpStatus.NOT_FOUND);
         }
-        Product product = productRepository.findById(id).orElseThrow(()->new LovelyException("Không tìm thấy sản phẩm",HttpStatus.NOT_FOUND));
-        if(product.isDeleted()){
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new LovelyException("Không tìm thấy sản phẩm", HttpStatus.NOT_FOUND));
+        if (product.isDeleted()) {
             throw new LovelyException("Không tìm thấy sản phẩm", HttpStatus.NOT_FOUND);
         }
         ProductDetailRes response = getProductDetailRes(product);
-        UploadFile uploadFile =uploadFileRepository.findById(product.getImageId()).orElse(null);
-        if(uploadFile != null){
+        UploadFile uploadFile = uploadFileRepository.findById(product.getImageId()).orElse(null);
+        if (uploadFile != null) {
             response.setThumbUrl(uploadFile.getThumbFilePath());
             response.setThumbName(uploadFile.getThumbFileName());
         }
@@ -115,9 +116,9 @@ public class ProductServiceImpl extends BaseService implements ProductService {
 
     @Override
     public BaseResponse<List<ProductListRes>> getListProduct(int page, String keyword, ActiveStatus status) {
-        long record = productRepository.totalRecord(keyword,status);
-        List<ProductListRes> list =  productRepository.getAllProduct(page,keyword,status);
-        return new BaseResponse<>(list,record,page);
+        long record = productRepository.totalRecord(keyword, status);
+        List<ProductListRes> list = productRepository.getAllProduct(page, keyword, status);
+        return new BaseResponse<>(list, record, page);
     }
 
     @Override
@@ -127,7 +128,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
         List<Integer> ids = request.getIds();
         List<Integer> existIds = productRepository.getExistIds(ids);
         Integer notExistId = productRepository.getExistIds(ids).stream().filter(id -> !existIds.contains(id)).findFirst().orElse(null);
-        if(notExistId != null) {
+        if (notExistId != null) {
             throw new LovelyException("product not exist", HttpStatus.BAD_REQUEST);
         }
         productRepository.deleteByIds(existIds);
@@ -135,21 +136,21 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     }
 
     @Override
-    public BaseResponse<List<ProductListRes>>getListProductByCategory(int categoryId, int page) {
-        if(!categoryRepository.existsById(categoryId)) {
+    public BaseResponse<List<ProductListRes>> getListProductByCategory(int categoryId, int page) {
+        if (!categoryRepository.existsById(categoryId)) {
             throw new LovelyException("Không tìm thấy danh mục", HttpStatus.BAD_REQUEST);
         }
         long count = productRepository.countAllProductByCategory(categoryId);
-        List<ProductListRes> list = productRepository.getAllProductByCategory(categoryId,page);
-        return new BaseResponse<>(list,count,page);
+        List<ProductListRes> list = productRepository.getAllProductByCategory(categoryId, page);
+        return new BaseResponse<>(list, count, page);
     }
 
     @Override
     public AddProductImageRes addImageId(AddProductImageReq request) {
         User user = getUser(RoleType.ADMIN);
 
-        Product product = productRepository.findById(request.getProductId()).orElseThrow(()-> new LovelyException("Không tìm thấy sản phẩm", HttpStatus.BAD_REQUEST));
-        UploadFile uploadFile = uploadFileRepository.findById(request.getImageId()).orElseThrow(()-> new LovelyException("Không tìm thấy hình ảnh", HttpStatus.BAD_REQUEST));
+        Product product = productRepository.findById(request.getProductId()).orElseThrow(() -> new LovelyException("Không tìm thấy sản phẩm", HttpStatus.BAD_REQUEST));
+        UploadFile uploadFile = uploadFileRepository.findById(request.getImageId()).orElseThrow(() -> new LovelyException("Không tìm thấy hình ảnh", HttpStatus.BAD_REQUEST));
         product.setImageId(uploadFile.getId());
         productRepository.save(product);
         return AddProductImageRes.builder()
@@ -161,22 +162,22 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     }
 
     private ProductDetailRes getProductDetailRes(Product product) {
-        if(!categoryRepository.existsById(product.getCategoryId())) {
+        if (!categoryRepository.existsById(product.getCategoryId())) {
             throw new LovelyException("Category not found", HttpStatus.BAD_REQUEST);
         }
         ProductDetailRes response = ProductDetailRes.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .price(product.getPrice())
-                .categoryName(categoryRepository.findById(product.getCategoryId()).get().getName())
                 .quantity(product.getQuantity())
                 .shortDescription(product.getShortDescription())
                 .longDescription(product.getLongDescription())
                 .imageId(product.getImageId())
+                .categoryId(categoryRepository.findById(product.getCategoryId()).get().getId())
                 .build();
 
-        UploadFile uploadFile =uploadFileRepository.findById(product.getImageId()).orElse(null);
-        if(uploadFile != null){
+        UploadFile uploadFile = uploadFileRepository.findById(product.getImageId()).orElse(null);
+        if (uploadFile != null) {
             response.setThumbUrl(uploadFile.getThumbFilePath());
             response.setThumbName(uploadFile.getThumbFileName());
         }

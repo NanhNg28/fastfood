@@ -15,4 +15,5 @@ public class CategoryListRes {
     String description;
     String thumbUrl;
     String thumbName;
+    Integer imageId;
 }

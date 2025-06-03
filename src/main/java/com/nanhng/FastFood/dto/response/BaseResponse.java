@@ -14,32 +14,36 @@ import java.io.Serializable;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BaseResponse <T> implements Serializable {
+public class BaseResponse<T> implements Serializable {
 
     private int code = HttpStatus.OK.value();
     private T data;
-    private String massage = "label success";
+    private String message = "label success";
     long totalRecords;
     int currentPage;
 
-    public BaseResponse(String massage) {
-        this.massage = massage;
+    public BaseResponse(String message) {
+        this.message = message;
     }
 
-    public BaseResponse( String massage, int code) {
+    public BaseResponse(T data) {
+        this.data = data;
+    }
+
+    public BaseResponse(String message, int code) {
         this.code = code;
-        this.massage = massage;
+        this.message = message;
     }
 
-    public BaseResponse(T data, String massage, int code) {
+    public BaseResponse(T data, String message, int code) {
         this.code = code;
         this.data = data;
-        this.massage = massage;
+        this.message = message;
     }
 
-    public BaseResponse(T data, String massage) {
+    public BaseResponse(T data, String message) {
         this.data = data;
-        this.massage = massage;
+        this.message = message;
     }
 
     public BaseResponse(T data, long totalRecords, int currentPage) {
