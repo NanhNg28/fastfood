@@ -40,6 +40,7 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
                         qProduct.id,
                         qProduct.name,
                         qProduct.price,
+                        qProduct.categoryId,
                         qProduct.category.name.as("categoryName"),
                         qUploadFile.thumbFilePath.as("thumbUrl"),
                         qUploadFile.thumbFileName.as("thumbName"),
