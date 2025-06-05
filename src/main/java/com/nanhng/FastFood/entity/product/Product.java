@@ -1,8 +1,11 @@
 package com.nanhng.FastFood.entity.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.entity.BaseEntity;
 import com.nanhng.FastFood.entity.category.Category;
+import com.nanhng.FastFood.entity.upload_file.UploadFile;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -15,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Product extends BaseEntity {
     @NotNull
     String name;
@@ -32,12 +36,14 @@ public class Product extends BaseEntity {
     @Column(name = "status", columnDefinition = "INT")
     ActiveStatus status;
 
-    boolean deleted;
-
-    @JoinColumn(name = "category_id",insertable = false, updatable = false)
+    @JsonIgnore
+    @JoinColumn(name = "category_id", insertable = false, updatable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     Category category;
 
     @Column(name = "image_id")
     Integer imageId;
+
+    @Transient
+    UploadFile image;
 }

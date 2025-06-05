@@ -19,8 +19,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Cart{
+public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +31,7 @@ public class Cart{
     Integer userId;
 
     @JsonIgnore
-    @JoinColumn(name = "user_id",insertable=false,updatable=false)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     @OneToOne
     User user;
 
@@ -39,5 +40,4 @@ public class Cart{
 
     @Transient
     private Double totalPrice = 0.0;
-
 }

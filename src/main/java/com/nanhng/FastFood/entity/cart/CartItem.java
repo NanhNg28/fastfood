@@ -29,4 +29,6 @@ public class CartItem {
     @Column(name = "product_id")
     Integer productId;
 
+    @Transient
+    Product product;
 }

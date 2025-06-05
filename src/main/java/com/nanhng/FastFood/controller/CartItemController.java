@@ -23,8 +23,8 @@ public class CartItemController {
 
     @Operation(description = "add new item into cart") //done
     @PostMapping("v1/cart-item/add")
-    public ResponseEntity<CartItem> addCartItem(@RequestBody @Valid AddCartItemReq request) {
-        return ResponseEntity.ok(cartItemService.addCartItem(request));
+    public ResponseEntity<BaseResponse<CartItem>> addCartItem(@RequestBody @Valid AddCartItemReq request) {
+        return ResponseEntity.ok(new BaseResponse<>(cartItemService.addCartItem(request)));
     }
 
     @Operation(description = "update cart item")//done
@@ -36,7 +36,7 @@ public class CartItemController {
     @Operation(description = "delete cart item")//done
     @DeleteMapping(path = "v1/cart-item/delete")
     public ResponseEntity<BaseResponse<List<Integer>>> deleteFood(@Valid @RequestBody IdsRequest request) {
-        return ResponseEntity.ok(new BaseResponse<>(cartItemService.deleteCartItemByIds(request),"delete successfully"));
+        return ResponseEntity.ok(new BaseResponse<>(cartItemService.deleteCartItemByIds(request), "delete successfully"));
     }
 
 }

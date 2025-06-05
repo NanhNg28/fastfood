@@ -24,11 +24,12 @@ public class CartServiceImpl extends BaseService implements CartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final UserRepository userRepository;
+
     @Override
     public Cart addCart(AddCartReq request) {
         User user = getUser();
 
-        if(cartRepository.existsCartByUserId(user.getId())) {
+        if (cartRepository.existsCartByUserId(user.getId())) {
             throw new LovelyException("cart already exists", HttpStatus.BAD_REQUEST);
         }
         Cart cart = new Cart();
@@ -39,10 +40,10 @@ public class CartServiceImpl extends BaseService implements CartService {
     @Override
     public void addCart(Integer userId) {
         User user = userRepository.findById(userId).orElse(null);
-        if(user == null || user.isDeleted()) {
+        if (user == null || user.isDeleted()) {
             throw new LovelyException("user not exists", HttpStatus.BAD_REQUEST);
         }
-        if(cartRepository.existsCartByUserId(user.getId())) {
+        if (cartRepository.existsCartByUserId(user.getId())) {
             throw new LovelyException("cart already exists", HttpStatus.BAD_REQUEST);
         }
         Cart cart = new Cart();
@@ -55,7 +56,7 @@ public class CartServiceImpl extends BaseService implements CartService {
         User user = getUser();
 
         int userId = request.getUserId();
-        Cart cart = cartRepository.findById(userId).orElseThrow(()->new LovelyException("Cart not found", HttpStatus.BAD_REQUEST));
+        Cart cart = cartRepository.findById(userId).orElseThrow(() -> new LovelyException("Cart not found", HttpStatus.BAD_REQUEST));
         cart.setCartItems(cartItemRepository.findAllByCartId(userId));
         cart.setTotalPrice(calculateTotalPrice(cart.getCartItems()));
         return cart;
@@ -66,7 +67,7 @@ public class CartServiceImpl extends BaseService implements CartService {
         User user = getUser();
 
         Cart cart = cartRepository.findByUserId(userId);
-        if(cart == null) {
+        if (cart == null) {
             throw new LovelyException("Cart not found", HttpStatus.BAD_REQUEST);
         }
         cart.setCartItems(cartItemRepository.findAllByCartId(userId));
@@ -79,18 +80,19 @@ public class CartServiceImpl extends BaseService implements CartService {
         User user = getUser();
 
         Cart cart = cartRepository.findByUserId(user.getId());
-        if(cart == null) {
-            throw new LovelyException("Cart not found", HttpStatus.BAD_REQUEST);
+
+        if (cart != null) {
+            cart.setCartItems(cartItemRepository.getAllByCartId(cart.getId()));
+            cart.setTotalPrice(calculateTotalPrice(cart.getCartItems()));
         }
-        cart.setCartItems(cartItemRepository.findAllByCartId(cart.getId()));
-        cart.setTotalPrice(calculateTotalPrice(cart.getCartItems()));
+
         return cart;
     }
 
     private Double calculateTotalPrice(List<CartItem> items) {
         double res = 0.0;
-        for(CartItem item : items) {
-            res += item.getPrice()*item.getQuantity();
+        for (CartItem item : items) {
+            res += item.getPrice() * item.getQuantity();
         }
         return res;
     }

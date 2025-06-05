@@ -1,6 +1,5 @@
 package com.nanhng.FastFood.entity.category;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.entity.BaseEntity;
 import jakarta.persistence.Column;
