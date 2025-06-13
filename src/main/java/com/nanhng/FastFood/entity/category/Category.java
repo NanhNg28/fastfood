@@ -4,6 +4,7 @@ import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "categories")
 public class Category extends BaseEntity {
 
     @NotNull
@@ -23,7 +25,5 @@ public class Category extends BaseEntity {
     @Column(name = "image_id")
     Integer imageId;
 
-    @Column(name = "status", columnDefinition = "INT")
-    ActiveStatus status;
     boolean deleted;
 }

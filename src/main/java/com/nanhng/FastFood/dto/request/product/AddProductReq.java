@@ -15,7 +15,7 @@ public class AddProductReq {
     String name;
 
     @NotNull
-    Double price;
+    Integer price;
 
     @NotNull
     Integer categoryId;

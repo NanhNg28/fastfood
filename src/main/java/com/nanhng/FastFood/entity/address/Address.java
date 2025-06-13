@@ -18,13 +18,12 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Table(name = "addresses")
 public class Address extends BaseEntity {
     @NotNull
     String city;
     @NotNull
     String street;
 
-    @Column(name = "status",columnDefinition = "INT")
-    ActiveStatus status;
+    Integer userId;
 }

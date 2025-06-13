@@ -47,7 +47,6 @@ public class UserServiceImpl extends BaseService implements UserService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phone(request.getPhone())
                 .email(request.getEmail())
-                .status(ActiveStatus.ACTIVE)
                 .role(RoleType.CUSTOMER)
                 .deleted(false)
                 .build();
@@ -62,10 +61,9 @@ public class UserServiceImpl extends BaseService implements UserService {
             Address address = Address.builder()
                     .city(request.getCity())
                     .street(request.getStreet())
-                    .status(ActiveStatus.ACTIVE)
                     .build();
             addressRepository.save(address);
-            user.setAddressId(address.getId());
+
         }
         return userRepository.save(user);
     }
@@ -77,15 +75,11 @@ public class UserServiceImpl extends BaseService implements UserService {
         if(user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())){
             throw new LovelyException("username or password incorrect", HttpStatus.UNAUTHORIZED);
         }
-        if(user.getStatus() != ActiveStatus.ACTIVE){
-            throw new LovelyException("account not active", HttpStatus.UNAUTHORIZED);
-        }
         return UserDetailRes.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .phone(user.getPhone())
                 .email(user.getEmail())
-                .status(user.getStatus())
                 .role(user.getRole())
                 .authToken(jwtToKenProvider.generateToken(user.getId()))
                 .build();
@@ -102,7 +96,6 @@ public class UserServiceImpl extends BaseService implements UserService {
         Address address = Address.builder()
                 .city(request.getCity())
                 .street(request.getStreet())
-                .status(ActiveStatus.ACTIVE)
                 .build();
         addressRepository.save(address);
         User user = User.builder()
@@ -110,10 +103,8 @@ public class UserServiceImpl extends BaseService implements UserService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phone(request.getPhone())
                 .email(request.getEmail())
-                .status(ActiveStatus.ACTIVE)
                 .role(RoleType.CUSTOMER)
                 .deleted(false)
-                .addressId(address.getId())
                 .build();
         userRepository.save(user);
 
@@ -134,9 +125,7 @@ public class UserServiceImpl extends BaseService implements UserService {
     @Override
     public User updateProfileUser(UpdateProfileUserReq request) {
         User user = getUser();
-        if(request.getAddressId() != null) {
-            user.setAddressId(request.getAddressId());
-        }
+
         return userRepository.save(user);
     }
 
@@ -203,16 +192,9 @@ public class UserServiceImpl extends BaseService implements UserService {
                 .username(user.getUsername())
                 .phone(user.getPhone())
                 .email(user.getEmail())
-                .status(user.getStatus())
                 .role(user.getRole())
                 .build();
-        if(user.getAddressId() != null){
-            Address address = addressRepository.findById(user.getAddressId()).orElse(null);
-            if(address != null) {
-                userDetailRes.setCity(address.getCity());
-                userDetailRes.setStreet(address.getStreet());
-            }
-        }
+
         return userDetailRes;
     }
 }

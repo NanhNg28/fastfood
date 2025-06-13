@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 public class ProductDetailRes {
     Integer id;
     String name;
-    Double price;
+    Integer price;
     String categoryName;
 
     int quantity;

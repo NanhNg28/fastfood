@@ -1,2 +1,0 @@
-ALTER TABLE `orders`
-ADD `note` VARCHAR(255);

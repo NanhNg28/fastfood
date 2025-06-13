@@ -6,6 +6,7 @@ import com.nanhng.FastFood.entity.otp.constants.OtpType;
 import com.nanhng.FastFood.entity.otp.constants.VerifyStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,6 +18,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Table(name = "otps")
 public class Otp extends BaseEntity {
 
     String otp;
@@ -29,7 +31,7 @@ public class Otp extends BaseEntity {
     @Column(name = "send_type", columnDefinition = "INT")
     OtpType type;
 
-    @Column(name = "status", columnDefinition = "INT")
+    @Column(name = "verify_status", columnDefinition = "INT")
     VerifyStatus status;
 
     boolean deleted;

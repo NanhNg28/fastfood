@@ -54,7 +54,6 @@ public class CartItemServiceImpl extends BaseService implements CartItemService 
         cartItem.setCartId(cart.getId());
         cartItem.setProductId(request.getProductId());
         cartItem.setQuantity(request.getQuantity());
-        cartItem.setPrice(product.getPrice());
         return cartItemRepository.save(cartItem);
     }
 
@@ -69,7 +68,6 @@ public class CartItemServiceImpl extends BaseService implements CartItemService 
         if (request.getProductId() != null) {
             Product product = productRepository.findById(request.getProductId()).orElseThrow(() -> new LovelyException("Product not found", HttpStatus.BAD_REQUEST));
             cartItem.setProductId(product.getId());
-            cartItem.setPrice(product.getPrice());
         }
         if (cartItem.getQuantity() != null || cartItem.getQuantity() != 0) {
             cartItem.setQuantity(request.getQuantity());

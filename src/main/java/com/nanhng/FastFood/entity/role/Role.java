@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "role")
+@Table(name = "roles")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Role extends BaseEntity {
     int objectId;
@@ -25,6 +25,4 @@ public class Role extends BaseEntity {
     @Column(name = "type",columnDefinition = "INT")
     RoleType roleType;
 
-    @Column(name = "status",columnDefinition = "INT")
-    ActiveStatus activeStatus;
 }

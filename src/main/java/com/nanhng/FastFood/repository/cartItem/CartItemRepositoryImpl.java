@@ -21,10 +21,10 @@ public class CartItemRepositoryImpl extends BaseRepository implements CartItemRe
                 .innerJoin(qProduct).on(qProduct.id.eq(qCartItem.productId))
                 .innerJoin(qUploadFile).on(qProduct.imageId.eq(qUploadFile.id))
                 .select(Projections.fields(CartItem.class, qCartItem.id, qProduct.id,
-                        qCartItem.cartId, qCartItem.price, qCartItem.quantity,
+                        qCartItem.cartId, qCartItem.quantity,
                         qCartItem.productId, Projections.fields(Product.class, qProduct.id,
                                 qProduct.name, qProduct.shortDescription, qProduct.imageId, qProduct.createdAt,
-                                qProduct.quantity, qProduct.price, qProduct.categoryId, qProduct.status,
+                                qProduct.quantity, qProduct.price, qProduct.categoryId,
                                 qProduct.updatedAt, qProduct.deleted,
                                 qUploadFile.as("image")).as("product")))
                 .fetch();

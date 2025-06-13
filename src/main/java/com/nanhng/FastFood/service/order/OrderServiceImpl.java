@@ -44,25 +44,18 @@ public class OrderServiceImpl extends BaseService implements OrderService{
         if(request.getUserId()!= user.getId()) {
             throw new LovelyException("Wrong account", HttpStatus.UNAUTHORIZED);
         }
-        if(user.getAddressId()==null){
-            throw new LovelyException("User does not have exist address yet");
-        }
+
         Double total = 0.0;
         Cart cart = cartService.getCart();
         Order order = new Order();
-        Address address = addressRepository.findById(user.getAddressId()).orElseThrow(()->new LovelyException("User does not have exist address yet"));
         order.setUserId(user.getId());
-        order.setName(request.getName());
         order.setNote(request.getNote());
-        order.setStreet(address.getStreet());
-        order.setCity(address.getCity());
         order.setStatus(OrderStatus.PENDING);
         order.setTotalPrice(total);
         orderRepository.save(order);
         for(CartItem cartItem : cart.getCartItems()) {
             OrderItem orderItem = setOrderItem(cartItem);
             orderItem.setOrderId(order.getId());
-            total += cartItem.getPrice();
             orderItemRepository.save(orderItem);
         }
 
@@ -87,15 +80,6 @@ public class OrderServiceImpl extends BaseService implements OrderService{
         }
         if(request.getStatus() != null) {
             order.setStatus(request.getStatus());
-        }
-        if(request.getCity()!= null && !request.getCity().isBlank()) {
-            order.setCity(request.getCity());
-        }
-        if(request.getStreet() != null && !request.getStreet().isBlank()) {
-            order.setStreet(request.getStreet());
-        }
-        if(request.getName() != null && !request.getName().isBlank()) {
-            order.setName(request.getName());
         }
         if(request.getNote() != null && !request.getNote().isBlank()) {
             order.setNote(request.getNote());
@@ -137,7 +121,6 @@ public class OrderServiceImpl extends BaseService implements OrderService{
     private OrderItem setOrderItem(CartItem cartItem) {
         return OrderItem.builder()
                 .quantity(cartItem.getQuantity())
-                .price(cartItem.getPrice())
                 .productId(cartItem.getProductId())
                 .build();
     }
@@ -145,12 +128,8 @@ public class OrderServiceImpl extends BaseService implements OrderService{
     private AddOrderRes toAddOrderRes(Order order) {
         return AddOrderRes.builder()
                 .id(order.getId())
-                .totalPrice(order.getTotalPrice())
                 .userId(order.getUserId())
                 .status(order.getStatus())
-                .city(order.getCity())
-                .street(order.getStreet())
-                .name(order.getName())
                 .note(order.getNote())
                 .build();
     }

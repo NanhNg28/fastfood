@@ -86,10 +86,8 @@ public class OrderRepositoryCustomImpl extends BaseRepository implements OrderRe
                         qOrder.id,
                         qOrder.userId,
                         qOrder.status,
-                        qOrder.street,
                         qOrder.createdAt,
                         qOrder.updatedAt,
-                        qOrder.name,
                         qOrder.note
                 ))
                 .offset(page * PAGE_SIZE)
@@ -160,10 +158,8 @@ public class OrderRepositoryCustomImpl extends BaseRepository implements OrderRe
                         qOrder.id,
                         qOrder.userId,
                         qOrder.status,
-                        qOrder.street,
                         qOrder.createdAt,
                         qOrder.updatedAt,
-                        qOrder.name,
                         qOrder.note
                 ))
                 .offset(page * PAGE_SIZE)
@@ -200,12 +196,10 @@ public class OrderRepositoryCustomImpl extends BaseRepository implements OrderRe
                         qOrder.id,
                         qOrder.userId,
                         qOrder.status,
-                        qOrder.street,
                         qOrder.createdAt,
                         qOrder.updatedAt,
                         qOrder.totalPrice,
-                        qOrder.note,
-                        qOrder.name
+                        qOrder.note
                 ))
                 .fetchOne();
         List<OrderItem> items = query().from(qOrderItem)

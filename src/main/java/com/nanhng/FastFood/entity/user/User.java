@@ -21,6 +21,7 @@ import org.springframework.lang.NonNull;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Table(name = "users")
 public class User extends BaseEntity {
 
     @NotNull
@@ -35,14 +36,9 @@ public class User extends BaseEntity {
     @NotNull
     String phone;
 
-    @Column(name = "status",columnDefinition = "INT")
-    ActiveStatus status;
-
     @Column(name = "role",columnDefinition = "INT")
     RoleType role;
 
-   @Column(name = "address_id")
-   Integer addressId;
 
    boolean deleted;
 }

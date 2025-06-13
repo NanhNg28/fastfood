@@ -44,7 +44,6 @@ public class CategoryServiceImpl extends BaseService implements CategoryService 
                 .description(request.getDescription())
                 .imageId(request.getImageId())
                 .deleted(false)
-                .status(ActiveStatus.ACTIVE)
                 .build();
         return categoryRepository.save(category);
     }

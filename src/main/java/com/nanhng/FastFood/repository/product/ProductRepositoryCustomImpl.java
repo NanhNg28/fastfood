@@ -30,7 +30,6 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
         JPAQueryFactory query = new JPAQueryFactory(entityManager);
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qProduct.deleted.eq(false));
-        builder.and(qProduct.status.eq(Objects.requireNonNullElse(status, ActiveStatus.ACTIVE)));
         if (keyword != null && !keyword.isBlank()) {
             builder.andAnyOf(qProduct.name.containsIgnoreCase(keyword));
         }
@@ -54,7 +53,6 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
     public long totalRecord(String keyword, ActiveStatus status) {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qProduct.deleted.eq(false));
-        builder.and(qProduct.status.eq(Objects.requireNonNullElse(status, ActiveStatus.ACTIVE)));
         if (keyword != null && !keyword.isBlank()) {
             builder.andAnyOf(qProduct.name.containsIgnoreCase(keyword));
         }
@@ -100,7 +98,6 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
     public long countAllProductByCategory(int categoryId) {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qProduct.deleted.eq(false));
-        builder.and(qProduct.status.eq(ActiveStatus.ACTIVE));
         builder.and(qProduct.category.id.eq(categoryId));
 
         Long count = query().from(qProduct).leftJoin(qUploadFile).on(qProduct.imageId.eq(qUploadFile.id))
@@ -115,7 +112,6 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
         JPAQueryFactory query = new JPAQueryFactory(entityManager);
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qProduct.deleted.eq(false));
-        builder.and(qProduct.status.eq(ActiveStatus.ACTIVE));
         builder.and(qProduct.category.id.eq(categoryId));
 
         return query.from(qProduct).leftJoin(qUploadFile).on(qProduct.imageId.eq(qUploadFile.id))

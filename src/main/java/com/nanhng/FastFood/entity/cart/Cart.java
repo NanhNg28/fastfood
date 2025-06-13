@@ -21,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Table(name = "carts")
 public class Cart {
 
     @Id
@@ -38,6 +39,4 @@ public class Cart {
     @Transient
     private List<CartItem> cartItems = new ArrayList<>();
 
-    @Transient
-    private Double totalPrice = 0.0;
 }

@@ -42,7 +42,6 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements Cate
     public List<CategoryListRes> findAll(int page, String keyword, ActiveStatus status) {
         JPAQueryFactory query = new JPAQueryFactory(entityManager);
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(qCategory.status.eq(Objects.requireNonNullElse(status, ActiveStatus.ACTIVE)));
         builder.and(qCategory.deleted.eq(false));
         if (keyword != null && !keyword.isBlank()) {
             builder.andAnyOf(qCategory.name.containsIgnoreCase(keyword));
@@ -79,7 +78,6 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements Cate
     public long countRecord(String keyword, ActiveStatus status) {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qCategory.deleted.eq(false));
-        builder.and(qCategory.status.eq(Objects.requireNonNullElse(status, ActiveStatus.ACTIVE)));
         if (keyword != null && !keyword.isBlank()) {
             builder.andAnyOf(qCategory.name.containsIgnoreCase(keyword));
         }

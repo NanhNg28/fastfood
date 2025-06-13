@@ -58,7 +58,6 @@ public class CartServiceImpl extends BaseService implements CartService {
         int userId = request.getUserId();
         Cart cart = cartRepository.findById(userId).orElseThrow(() -> new LovelyException("Cart not found", HttpStatus.BAD_REQUEST));
         cart.setCartItems(cartItemRepository.findAllByCartId(userId));
-        cart.setTotalPrice(calculateTotalPrice(cart.getCartItems()));
         return cart;
     }
 
@@ -71,7 +70,6 @@ public class CartServiceImpl extends BaseService implements CartService {
             throw new LovelyException("Cart not found", HttpStatus.BAD_REQUEST);
         }
         cart.setCartItems(cartItemRepository.findAllByCartId(userId));
-        cart.setTotalPrice(calculateTotalPrice(cart.getCartItems()));
         return cart;
     }
 
@@ -83,17 +81,9 @@ public class CartServiceImpl extends BaseService implements CartService {
 
         if (cart != null) {
             cart.setCartItems(cartItemRepository.getAllByCartId(cart.getId()));
-            cart.setTotalPrice(calculateTotalPrice(cart.getCartItems()));
         }
 
         return cart;
     }
 
-    private Double calculateTotalPrice(List<CartItem> items) {
-        double res = 0.0;
-        for (CartItem item : items) {
-            res += item.getPrice() * item.getQuantity();
-        }
-        return res;
-    }
 }

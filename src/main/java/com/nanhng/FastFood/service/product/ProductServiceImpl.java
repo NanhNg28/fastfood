@@ -50,7 +50,6 @@ public class ProductServiceImpl extends BaseService implements ProductService {
                 .quantity(request.getQuantity())
                 .shortDescription(request.getShortDescription())
                 .longDescription(request.getLongDescription())
-                .status(ActiveStatus.ACTIVE)
                 .imageId(request.getImageId())
                 .build();
         return productRepository.save(product);

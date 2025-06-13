@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor
 public class AddOrderRes {
     Integer id;
-    Double totalPrice;
     Integer userId;
     OrderStatus status;
     String city;

@@ -21,9 +21,6 @@ import java.util.List;
 @Table(name = "orders")
 public class Order extends BaseEntity {
 
-    @NotNull
-    String name;
-
     String note;
 
     @Transient
@@ -40,8 +37,6 @@ public class Order extends BaseEntity {
     @Column(name = "order_status",columnDefinition = "VARCHAR(50)")
     OrderStatus status;
 
-    @NotNull
-    String city;
-    @NotNull
-    String street;
+    @Transient
+    Address address;
 }

@@ -53,7 +53,6 @@ public class UserRepositoryCustomImpl extends BaseRepository implements UserRepo
         JPAQueryFactory query = new JPAQueryFactory(entityManager);
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qUser.deleted.eq(false));
-        builder.and(qUser.status.eq(Objects.requireNonNullElse(status, ActiveStatus.ACTIVE)));
         if (keyword != null && !keyword.isBlank()) {
             builder.andAnyOf(qUser.username.containsIgnoreCase(keyword), qUser.email.containsIgnoreCase(keyword));
         }
@@ -64,9 +63,7 @@ public class UserRepositoryCustomImpl extends BaseRepository implements UserRepo
                         qUser.username,
                         qUser.email,
                         qUser.phone,
-                        qUser.status,
                         qUser.role,
-                        qUser.addressId,
                         qUser.id))
                 .offset(page * PAGE_SIZE)
                 .limit(PAGE_SIZE)
@@ -77,7 +74,6 @@ public class UserRepositoryCustomImpl extends BaseRepository implements UserRepo
     public long totalRecord(String keyword, ActiveStatus status) {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qUser.deleted.eq(false));
-        builder.and(qUser.status.eq(Objects.requireNonNullElse(status, ActiveStatus.ACTIVE)));
         if (keyword != null && !keyword.isBlank()) {
             builder.andAnyOf(qUser.username.containsIgnoreCase(keyword), qUser.email.containsIgnoreCase(keyword));
         }

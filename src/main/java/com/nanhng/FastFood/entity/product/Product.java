@@ -19,12 +19,13 @@ import org.jetbrains.annotations.NotNull;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Table(name = "products")
 public class Product extends BaseEntity {
     @NotNull
     String name;
 
     @NotNull
-    Double price;
+    Integer price;
 
     @Column(name = "category_id")
     Integer categoryId;
@@ -32,9 +33,6 @@ public class Product extends BaseEntity {
     int quantity;
     String shortDescription;
     String longDescription;
-
-    @Column(name = "status", columnDefinition = "INT")
-    ActiveStatus status;
 
     @JsonIgnore
     @JoinColumn(name = "category_id", insertable = false, updatable = false)

@@ -16,7 +16,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "upload_file")
+@Table(name = "upload_files")
 public class UploadFile extends BaseEntity {
 
     @Column(name = "origin_file_path")
