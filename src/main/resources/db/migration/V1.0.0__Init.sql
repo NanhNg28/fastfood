@@ -21,6 +21,9 @@ CREATE TABLE `upload_files`(
                                `thumb_file_path`  VARCHAR(255) DEFAULT NULL COMMENT 'Đường dẫn ảnh thumb (nếu có)',
                                `origin_file_name` VARCHAR(255) NOT NULL COMMENT 'tên gốc',
                                `thumb_file_name`  VARCHAR(255) DEFAULT NULL COMMENT 'tên ảnh thumb (nếu có)',
+                               `fixed_file_path`  VARCHAR(255) NOT NULL COMMENT 'Đường dẫn website ảnh gốc',
+                               `fixed_thumb_path` VARCHAR(255) DEFAULT NULL COMMENT 'Đường dẫn website ảnh thumb (nếu có)',
+                               `name`             VARCHAR(255) DEFAULT NULL COMMENT 'Đường dẫn website ảnh thumb (nếu có)',
                                `type`             INT NOT NULL COMMENT 'Loại file (enum UploadFileType)',
                                `width`            INT DEFAULT NULL COMMENT 'Chiều rộng (nếu là ảnh/video)',
                                `height`           INT DEFAULT NULL COMMENT 'Chiều cao (nếu là ảnh/video)',
@@ -72,6 +75,8 @@ CREATE TABLE `products` (
                             `image_id`          INT UNSIGNED NOT NULL,
                             `short_description` VARCHAR(255) DEFAULT NULL COMMENT 'Mô tả ngắn',
                             `long_description` TEXT DEFAULT NULL COMMENT 'Mô tả chi tiết',
+                            `discount_percentage` INT DEFAULT NULL,
+                            `discount_expiry_date` DATE DEFAULT NULL,
                             `deleted`          BIT NOT NULL DEFAULT 0 COMMENT 'Trạng thái xóa: 0 - Chưa xóa, 1 - Đã xóa',
                             `created_at`       TIMESTAMP COMMENT 'Thời gian tạo',
                             `updated_at`       TIMESTAMP COMMENT 'Thời gian cập nhật',
@@ -108,8 +113,8 @@ CREATE TABLE `orders` (
                           `id`           INT UNSIGNED NOT NULL AUTO_INCREMENT,
                           `user_id`      INT UNSIGNED NOT NULL COMMENT 'ID người dùng',
                           `address_id`   INT UNSIGNED NOT NULL COMMENT 'ID địa chỉ giao hàng',
-                          `total_price`  DOUBLE NOT NULL COMMENT 'Tổng tiền',
                           `order_status` VARCHAR(50) COMMENT 'Trạng thái đơn hàng',
+                          `payment_gateway` VARCHAR(50),
                           `created_at`       TIMESTAMP COMMENT 'Thời gian tạo',
                           `updated_at`       TIMESTAMP COMMENT 'Thời gian cập nhật',
                           `deleted`      BIT NOT NULL DEFAULT 0 COMMENT 'Trạng thái xóa: 0 - Chưa xóa, 1 - Đã xóa',
@@ -170,6 +175,16 @@ CREATE TABLE `banners`
 INSERT INTO users (username, password, email, phone, role, deleted, created_at, updated_at)
 VALUES ('admin', '$2a$10$90oddm68E7vWuBmnyv/ecu2yjNXlaYq9C0QHOBXQ93/2xEDX4J.iq', 'admin@gmail.com', '0123456789', 0, FALSE, NOW(), NOW());
 
+
+INSERT INTO users (username, password, email, phone, role, deleted, created_at, updated_at)
+VALUES ('user', '$2a$10$90oddm68E7vWuBmnyv/ecu2yjNXlaYq9C0QHOBXQ93/2xEDX4J.iq', 'user@gmail.com', '0123456789', 1, FALSE, NOW(), NOW());
+
+INSERT INTO users (username, password, email, phone, role, deleted, created_at, updated_at)
+VALUES ('user1', '$2a$10$90oddm68E7vWuBmnyv/ecu2yjNXlaYq9C0QHOBXQ93/2xEDX4J.iq', 'user1@gmail.com', '0123456789', 1, FALSE, NOW(), NOW());
+
+INSERT INTO users (username, password, email, phone, role, deleted, created_at, updated_at)
+VALUES ('user2', '$2a$10$90oddm68E7vWuBmnyv/ecu2yjNXlaYq9C0QHOBXQ93/2xEDX4J.iq', 'user2@gmail.com', '0123456789', 1, FALSE, NOW(), NOW());
+
 CREATE TABLE `otps`
 (
     id             int unsigned NOT NULL AUTO_INCREMENT ,
@@ -186,3 +201,36 @@ CREATE TABLE `otps`
 ) ENGINE = InnoDB COMMENT ='banner'
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
+
+CREATE TABLE `blogs` (
+                         id           INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                         title        VARCHAR(255) DEFAULT NULL,
+                         author_id    INT UNSIGNED DEFAULT NULL,
+                         introduction        VARCHAR(255) DEFAULT NULL,
+                         thumbnail_image_id        INT UNSIGNED DEFAULT NULL,
+                         deleted      BIT          NOT NULL DEFAULT 0,
+                         created_at   TIMESTAMP    NOT NULL,
+                         updated_at   TIMESTAMP    NOT NULL,
+                         PRIMARY KEY (id),
+                         FOREIGN KEY (author_id) references users(`id`),
+                         FOREIGN KEY (thumbnail_image_id) references upload_files(`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci
+  COMMENT = 'blogs';
+
+CREATE TABLE `blog_contents` (
+                                 id           INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                                 blog_id      INT UNSIGNED NOT NULL,
+                                 content      TEXT         DEFAULT NULL,
+                                 upload_file_id     INT UNSIGNED          DEFAULT NULL,
+                                 deleted      BIT          NOT NULL DEFAULT 0,
+                                 created_at   TIMESTAMP    NOT NULL,
+                                 updated_at   TIMESTAMP    NOT NULL,
+                                 PRIMARY KEY (id),
+                                 FOREIGN KEY (blog_id) references blogs(`id`),
+                                 FOREIGN KEY (upload_file_id) references upload_files(`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci
+  COMMENT = 'blog_contents';

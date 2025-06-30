@@ -1,6 +1,6 @@
 package com.nanhng.FastFood.service.category;
 
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
+
 import com.nanhng.FastFood.dto.request.category.AddCategoryImageReq;
 import com.nanhng.FastFood.dto.request.category.AddCategoryReq;
 import com.nanhng.FastFood.dto.request.category.UpdateCategoryReq;
@@ -18,6 +18,6 @@ public interface CategoryService {
     Category updateCategory(UpdateCategoryReq request);
     CategoryDetailRes getDetailCategory(int id);
     List<Integer> deleteCategory(IdsRequest ids);
-    BaseResponse<List<CategoryListRes>> getAllCategory(int page, String searchKeyword, ActiveStatus status);
+    BaseResponse<List<CategoryListRes>> getAllCategory(int page, String searchKeyword);
     AddCategoryImageRes addImageId(AddCategoryImageReq request);
 }

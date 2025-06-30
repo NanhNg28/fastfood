@@ -1,7 +1,7 @@
 package com.nanhng.FastFood.entity.role;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
+
 import com.nanhng.FastFood.dto.constant.RoleType;
 import com.nanhng.FastFood.entity.BaseEntity;
 import jakarta.persistence.Column;
@@ -15,7 +15,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "roles")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Role extends BaseEntity {
     int objectId;

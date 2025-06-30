@@ -1,6 +1,5 @@
 package com.nanhng.FastFood.repository.category;
 
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.response.category.CategoryListRes;
 import com.nanhng.FastFood.entity.category.Category;
 import com.nanhng.FastFood.entity.category.QCategory;
@@ -14,7 +13,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.nanhng.FastFood.util.Constant.PAGE_SIZE;
 
@@ -39,7 +37,7 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements Cate
     }
 
     @Override
-    public List<CategoryListRes> findAll(int page, String keyword, ActiveStatus status) {
+    public List<CategoryListRes> findAll(int page, String keyword) {
         JPAQueryFactory query = new JPAQueryFactory(entityManager);
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qCategory.deleted.eq(false));
@@ -75,7 +73,7 @@ public class CategoryRepositoryCustomImpl extends BaseRepository implements Cate
     }
 
     @Override
-    public long countRecord(String keyword, ActiveStatus status) {
+    public long countRecord(String keyword) {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qCategory.deleted.eq(false));
         if (keyword != null && !keyword.isBlank()) {

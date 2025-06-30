@@ -51,7 +51,7 @@ public class StorageLocal implements StorageResource {
             log.error("Write file error : {}", src);
             throw new LovelyException("Write file error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return String.format("%s/%s", config.getDirectory(), path);
+        return String.format("%s%s", config.getHostname(), path);
     }
 
     @Override

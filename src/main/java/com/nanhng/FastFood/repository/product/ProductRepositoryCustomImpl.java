@@ -1,6 +1,5 @@
 package com.nanhng.FastFood.repository.product;
 
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.response.product.ProductListRes;
 import com.nanhng.FastFood.entity.product.QProduct;
 import com.nanhng.FastFood.entity.upload_file.QUploadFile;
@@ -25,7 +24,7 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
     EntityManager entityManager;
 
     @Override
-    public List<ProductListRes> getAllProduct(int page, String keyword, ActiveStatus status) {
+    public List<ProductListRes> getAllProduct(int page, String keyword) {
 
         JPAQueryFactory query = new JPAQueryFactory(entityManager);
         BooleanBuilder builder = new BooleanBuilder();
@@ -50,7 +49,7 @@ public class ProductRepositoryCustomImpl extends BaseRepository implements Produ
     }
 
     @Override
-    public long totalRecord(String keyword, ActiveStatus status) {
+    public long totalRecord(String keyword) {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qProduct.deleted.eq(false));
         if (keyword != null && !keyword.isBlank()) {

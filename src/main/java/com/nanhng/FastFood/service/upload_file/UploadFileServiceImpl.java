@@ -4,6 +4,7 @@ import com.nanhng.FastFood.entity.upload_file.UploadFile;
 import com.nanhng.FastFood.entity.upload_file.constant.UploadFileType;
 import com.nanhng.FastFood.exception.LovelyException;
 import com.nanhng.FastFood.other_service.storage.StorageResource;
+import com.nanhng.FastFood.other_service.storage.nfs_local.StorageNfsConfig;
 import com.nanhng.FastFood.repository.upload_file.UploadFileRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,13 +22,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class UploadFileServiceImpl implements UploadFileService {
     private final UploadFileRepository uploadFileRepository;
-
     private final StorageResource storageResource;
+
     @Override
     public UploadFile uploadImage(final MultipartFile file) {
         String timeStamp = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS").format(new Date());
@@ -53,25 +56,35 @@ public class UploadFileServiceImpl implements UploadFileService {
             }
             image.setType(UploadFileType.IMAGE);
             image.setSize(file.getSize());
-            image.setOriginFilePath(storageResource.writeResource(file.getInputStream(),"image/" + originalName));
+            image.setOriginFilePath("image/" +originalName);
             image.setOriginalFileName(originalName);
+            image.setFixedFilePath(storageResource.writeResource(file.getInputStream(),"image/" + originalName));
             ByteArrayOutputStream thumbOutputStream = createThumbnail(file, type, fileName);
             if (thumbOutputStream != null) {
                 try (InputStream inputStream = new ByteArrayInputStream(thumbOutputStream.toByteArray())) {
-                    image.setThumbFilePath(storageResource.writeResource(inputStream, "image/" + thumbName));
+                    image.setFixedThumbPath(storageResource.writeResource(inputStream,"image/" + thumbName));
+                    image.setThumbFilePath("image/" + thumbName);
                     image.setThumbFileName(thumbName);
                 }
             } else {
                 image.setThumbFilePath(image.getOriginFilePath());
                 image.setThumbFileName(originalName);
+                image.setFixedThumbPath(image.getFixedFilePath());
             }
-            image = uploadFileRepository.save(image);
-            return image;
+            return uploadFileRepository.save(image);
         } catch (IOException e) {
             throw new LovelyException(e.getMessage());
         }
+    }
 
-
+    @Override
+    public List<UploadFile> uploadManyImage(List<MultipartFile> listFiles) {
+        List<UploadFile> result = new LinkedList<>();
+        for (MultipartFile file : listFiles) {
+            UploadFile uploadFile = uploadImage(file);
+            result.addLast(uploadFile);
+        }
+        return result;
     }
 
     @Override

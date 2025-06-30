@@ -1,6 +1,6 @@
 package com.nanhng.FastFood.dto.response.order;
 
-import com.nanhng.FastFood.dto.constant.OrderStatus;
+import com.nanhng.FastFood.entity.order.constants.OrderStatus;
 import com.nanhng.FastFood.entity.order.OrderItem;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;

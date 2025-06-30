@@ -1,6 +1,5 @@
 package com.nanhng.FastFood.service.user;
 
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.request.ids.IdsRequest;
 import com.nanhng.FastFood.dto.request.otp.SendOtpReq;
 import com.nanhng.FastFood.dto.request.user.*;
@@ -25,7 +24,7 @@ public interface UserService {
 
     User changePassword(UserChangePasswordReq request);
 
-    BaseResponse<List<UserListRes>> getListUser(int page, String keyword, ActiveStatus status);
+    BaseResponse<List<UserListRes>> getListUser(int page, String keyword);
 
     User getMyProfile();
 

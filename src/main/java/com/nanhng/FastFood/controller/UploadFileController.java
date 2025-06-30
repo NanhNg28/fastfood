@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -24,7 +25,7 @@ import java.util.Map;
 public class UploadFileController {
     private final UploadFileService uploadFileService;
 
-    @Value("system.backend.url")
+    @Value("${system.backend.url}")
     private String BACKEND_URL;
 
 //    @Operation(summary = "admin add product image")//done
@@ -70,6 +71,23 @@ public class UploadFileController {
             throw new LovelyException("File size is too large, please choose file smaller than 20MB");
         }
         UploadFile uploadFile = uploadFileService.uploadImage(file);
+        return ResponseEntity.ok(new BaseResponse<>(uploadFile));
+    }
+
+    @PostMapping("api/v1/media/upload-image-list")
+    public ResponseEntity<BaseResponse<List<UploadFile>>> uploadManyImage(@RequestParam("file") final List<MultipartFile> listFile) {
+        if (listFile == null || listFile.isEmpty()) {
+            throw new LovelyException("No files provided", HttpStatus.BAD_REQUEST);
+        }
+        for(MultipartFile file : listFile) {
+            if (file == null) {
+                throw new LovelyException("cant not upload empty image", HttpStatus.BAD_REQUEST);
+            }
+            if (file.getSize() > 1024 * 1024 * 20) {
+                throw new LovelyException("File size is too large, please choose file smaller than 20MB");
+            }
+        }
+        List<UploadFile> uploadFile = uploadFileService.uploadManyImage(listFile);
         return ResponseEntity.ok(new BaseResponse<>(uploadFile));
     }
 

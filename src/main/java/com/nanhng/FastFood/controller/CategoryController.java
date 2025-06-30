@@ -1,6 +1,5 @@
 package com.nanhng.FastFood.controller;
 
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.request.category.AddCategoryReq;
 import com.nanhng.FastFood.dto.request.category.UpdateCategoryReq;
 import com.nanhng.FastFood.dto.request.ids.IdsRequest;
@@ -44,9 +43,8 @@ public class CategoryController {
     @Operation(description = "get all category")//done
     @GetMapping("v1/category/list")
     public ResponseEntity<BaseResponse<List<CategoryListRes>>> getAllCategory(@RequestParam int page,
-                                                                              @RequestParam(required = false) String searchKeyword,
-                                                                              @RequestParam(required = false) ActiveStatus status) {
-        return ResponseEntity.ok(categoryService.getAllCategory(page, searchKeyword, status));
+                                                                              @RequestParam(required = false) String searchKeyword) {
+        return ResponseEntity.ok(categoryService.getAllCategory(page, searchKeyword));
     }
 
     @Operation(description = "admin delete category")//done

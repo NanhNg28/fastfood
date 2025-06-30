@@ -1,7 +1,6 @@
 package com.nanhng.FastFood.dto.request.order;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nanhng.FastFood.dto.constant.OrderStatus;
+import com.nanhng.FastFood.entity.order.constants.OrderStatus;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

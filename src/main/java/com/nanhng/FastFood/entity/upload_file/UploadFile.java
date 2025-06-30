@@ -29,6 +29,12 @@ public class UploadFile extends BaseEntity {
     @Column(name = "thumb_file_name")
     String thumbFileName;
 
+    @Column(name = "fixed_file_path")
+    String fixedFilePath;
+
+    @Column(name = "fixed_thumb_path")
+    String fixedThumbPath;
+
     @Column(columnDefinition = "INT")
     UploadFileType type;
 
@@ -36,5 +42,6 @@ public class UploadFile extends BaseEntity {
     Integer height;
     Integer duration;
     Long size;
+    String name;
 
 }

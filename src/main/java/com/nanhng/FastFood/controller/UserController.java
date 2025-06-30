@@ -1,11 +1,9 @@
 package com.nanhng.FastFood.controller;
 
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.request.ids.IdsRequest;
 import com.nanhng.FastFood.dto.request.user.AddUserReq;
 import com.nanhng.FastFood.dto.request.user.UpdateProfileUserReq;
 import com.nanhng.FastFood.dto.request.user.UserChangePasswordReq;
-import com.nanhng.FastFood.dto.request.user.UserRegisterReq;
 import com.nanhng.FastFood.dto.response.BaseResponse;
 import com.nanhng.FastFood.dto.response.user.UserListRes;
 import com.nanhng.FastFood.entity.user.User;
@@ -53,9 +51,8 @@ public class UserController {
     @Operation(description = "admin get list user")//done
     @GetMapping(path = "v1/user/list")
     public ResponseEntity<BaseResponse<List<UserListRes>>> getListFood(@RequestParam int page,
-                                                                       @RequestParam(required = false) String keyword,
-                                                                       @RequestParam(required = false) ActiveStatus status) {
-        return ResponseEntity.ok(userService.getListUser(page,keyword,status));
+                                                                       @RequestParam(required = false) String keyword) {
+        return ResponseEntity.ok(userService.getListUser(page,keyword));
     }
 
     @Operation(description = "get my profile")

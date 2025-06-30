@@ -1,6 +1,6 @@
 package com.nanhng.FastFood.service.order;
 
-import com.nanhng.FastFood.dto.constant.OrderStatus;
+import com.nanhng.FastFood.entity.order.constants.OrderStatus;
 import com.nanhng.FastFood.dto.constant.RoleType;
 import com.nanhng.FastFood.dto.request.order.AddOrderReq;
 import com.nanhng.FastFood.dto.request.order.UpdateOrderReq;
@@ -8,7 +8,6 @@ import com.nanhng.FastFood.dto.response.BaseResponse;
 import com.nanhng.FastFood.dto.response.order.AddOrderRes;
 import com.nanhng.FastFood.dto.response.order.OrderDetailRes;
 import com.nanhng.FastFood.dto.response.order.OrderListRes;
-import com.nanhng.FastFood.entity.address.Address;
 import com.nanhng.FastFood.entity.cart.Cart;
 import com.nanhng.FastFood.entity.cart.CartItem;
 import com.nanhng.FastFood.entity.order.Order;
@@ -45,13 +44,11 @@ public class OrderServiceImpl extends BaseService implements OrderService{
             throw new LovelyException("Wrong account", HttpStatus.UNAUTHORIZED);
         }
 
-        Double total = 0.0;
         Cart cart = cartService.getCart();
         Order order = new Order();
         order.setUserId(user.getId());
         order.setNote(request.getNote());
         order.setStatus(OrderStatus.PENDING);
-        order.setTotalPrice(total);
         orderRepository.save(order);
         for(CartItem cartItem : cart.getCartItems()) {
             OrderItem orderItem = setOrderItem(cartItem);
@@ -59,7 +56,6 @@ public class OrderServiceImpl extends BaseService implements OrderService{
             orderItemRepository.save(orderItem);
         }
 
-        order.setTotalPrice(total);
         orderRepository.save(order);
         AddOrderRes addOrderRes = toAddOrderRes(order);
         eventPublisher.publishEvent(addOrderRes);

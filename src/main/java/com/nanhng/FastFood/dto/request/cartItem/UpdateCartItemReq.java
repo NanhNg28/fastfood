@@ -15,5 +15,4 @@ public class UpdateCartItemReq {
     Integer cartItemId;
     @NotNull
     Integer quantity;
-    Integer productId;
 }

@@ -1,7 +1,7 @@
 package com.nanhng.FastFood.repository.user;
 
 
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
+
 import com.nanhng.FastFood.dto.request.user.UserRegisterReq;
 import com.nanhng.FastFood.dto.response.user.UserListRes;
 import com.nanhng.FastFood.entity.user.QUser;
@@ -48,7 +48,7 @@ public class UserRepositoryCustomImpl extends BaseRepository implements UserRepo
     }
 
     @Override
-    public List<UserListRes> getAllProduct(int page, String keyword, ActiveStatus status) {
+    public List<UserListRes> getAllProduct(int page, String keyword) {
 
         JPAQueryFactory query = new JPAQueryFactory(entityManager);
         BooleanBuilder builder = new BooleanBuilder();
@@ -71,7 +71,7 @@ public class UserRepositoryCustomImpl extends BaseRepository implements UserRepo
     }
 
     @Override
-    public long totalRecord(String keyword, ActiveStatus status) {
+    public long totalRecord(String keyword) {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qUser.deleted.eq(false));
         if (keyword != null && !keyword.isBlank()) {

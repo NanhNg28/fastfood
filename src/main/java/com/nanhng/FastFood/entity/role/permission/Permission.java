@@ -1,7 +1,6 @@
 package com.nanhng.FastFood.entity.role.permission;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.constant.RoleType;
 import com.nanhng.FastFood.entity.BaseEntity;
 import com.nanhng.FastFood.entity.role.constant.PermissionGroup;
@@ -45,8 +44,5 @@ public class Permission extends BaseEntity {
 
     @Column(name = "type", columnDefinition = "INT")
     RoleType type;
-
-    @Column(name="status", columnDefinition = "INT")
-    ActiveStatus status;
 
 }

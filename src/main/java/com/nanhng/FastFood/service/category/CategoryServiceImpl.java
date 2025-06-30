@@ -1,6 +1,5 @@
 package com.nanhng.FastFood.service.category;
 
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.constant.RoleType;
 import com.nanhng.FastFood.dto.request.category.AddCategoryImageReq;
 import com.nanhng.FastFood.dto.request.category.AddCategoryReq;
@@ -99,9 +98,9 @@ public class CategoryServiceImpl extends BaseService implements CategoryService 
     }
 
     @Override
-    public BaseResponse<List<CategoryListRes>> getAllCategory(int page, String keyword, ActiveStatus status) {
-        long count = categoryRepository.countRecord(keyword, status);
-        List<CategoryListRes> list = categoryRepository.findAll(page,keyword,status);
+    public BaseResponse<List<CategoryListRes>> getAllCategory(int page, String keyword) {
+        long count = categoryRepository.countRecord(keyword);
+        List<CategoryListRes> list = categoryRepository.findAll(page,keyword);
         return new BaseResponse<>(list,count,page);
     }
 

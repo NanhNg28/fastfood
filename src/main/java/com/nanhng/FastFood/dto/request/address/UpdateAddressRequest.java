@@ -1,7 +1,6 @@
 package com.nanhng.FastFood.dto.request.address;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import jakarta.persistence.Column;
 import lombok.AccessLevel;
 import lombok.Getter;

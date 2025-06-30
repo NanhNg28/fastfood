@@ -1,6 +1,5 @@
 package com.nanhng.FastFood.controller;
 
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.request.ids.IdsRequest;
 import com.nanhng.FastFood.dto.request.product.AddProductImageReq;
 import com.nanhng.FastFood.dto.request.product.AddProductReq;
@@ -10,6 +9,7 @@ import com.nanhng.FastFood.dto.response.product.AddProductImageRes;
 import com.nanhng.FastFood.dto.response.product.ProductDetailRes;
 import com.nanhng.FastFood.dto.response.product.ProductListRes;
 import com.nanhng.FastFood.entity.product.Product;
+import com.nanhng.FastFood.service.banner.BannerServiceImpl;
 import com.nanhng.FastFood.service.product.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -39,16 +39,15 @@ public class ProductController {
 
     @Operation(description = "get detail food") //done
     @GetMapping(path = "v1/food/detail/{id}")
-    public ResponseEntity<BaseResponse<ProductDetailRes>> getFoodDetail(@PathVariable int id) {
+    public ResponseEntity<BaseResponse<Product>> getFoodDetail(@PathVariable int id) {
         return ResponseEntity.ok(new BaseResponse<>(productService.getDetailProduct(id)));
     }
 
     @Operation(description = "get list food") //done
     @GetMapping(path = "v1/food/list")
     public ResponseEntity<BaseResponse<List<ProductListRes>>> getListFood(@RequestParam int page,
-                                                                          @RequestParam(required = false) String keyword,
-                                                                          @RequestParam(required = false) ActiveStatus status) {
-        return ResponseEntity.ok(productService.getListProduct(page, keyword, status));
+                                                                          @RequestParam(required = false) String keyword) {
+        return ResponseEntity.ok(productService.getListProduct(page, keyword));
     }
 
     @Operation(description = "admin delete food")//done

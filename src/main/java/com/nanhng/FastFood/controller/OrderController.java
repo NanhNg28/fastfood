@@ -1,6 +1,6 @@
 package com.nanhng.FastFood.controller;
 
-import com.nanhng.FastFood.dto.constant.OrderStatus;
+import com.nanhng.FastFood.entity.order.constants.OrderStatus;
 import com.nanhng.FastFood.dto.request.order.AddOrderReq;
 import com.nanhng.FastFood.dto.request.order.UpdateOrderReq;
 import com.nanhng.FastFood.dto.response.BaseResponse;

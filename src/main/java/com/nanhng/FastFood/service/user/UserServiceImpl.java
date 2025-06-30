@@ -1,6 +1,6 @@
 package com.nanhng.FastFood.service.user;
 
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
+
 import com.nanhng.FastFood.dto.constant.RoleType;
 import com.nanhng.FastFood.dto.request.ids.IdsRequest;
 import com.nanhng.FastFood.dto.request.user.*;
@@ -113,7 +113,6 @@ public class UserServiceImpl extends BaseService implements UserService {
                 .username(user.getUsername())
                 .phone(user.getPhone())
                 .email(user.getEmail())
-                .status(ActiveStatus.ACTIVE)
                 .role(user.getRole())
                 .city(address.getCity())
                 .street(address.getStreet())
@@ -160,11 +159,11 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
-    public BaseResponse<List<UserListRes>> getListUser(int page, String keyword, ActiveStatus status) {
+    public BaseResponse<List<UserListRes>> getListUser(int page, String keyword) {
         User user = getUser(RoleType.ADMIN);
 
-        long record = userRepository.totalRecord(keyword,status);
-        List<UserListRes> list =  userRepository.getAllProduct(page,keyword,status);
+        long record = userRepository.totalRecord(keyword);
+        List<UserListRes> list =  userRepository.getAllProduct(page,keyword);
         return new BaseResponse<>(list,record,page);
     }
 

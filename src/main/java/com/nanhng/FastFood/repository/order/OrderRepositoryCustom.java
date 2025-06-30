@@ -1,6 +1,6 @@
 package com.nanhng.FastFood.repository.order;
 
-import com.nanhng.FastFood.dto.constant.OrderStatus;
+import com.nanhng.FastFood.entity.order.constants.OrderStatus;
 import com.nanhng.FastFood.dto.response.dashboard.OrderCountRes;
 import com.nanhng.FastFood.dto.response.dashboard.OrderRevenueRes;
 import com.nanhng.FastFood.dto.response.order.OrderDetailRes;

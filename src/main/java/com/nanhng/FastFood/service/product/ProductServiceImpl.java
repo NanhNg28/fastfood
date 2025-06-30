@@ -1,6 +1,6 @@
 package com.nanhng.FastFood.service.product;
 
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
+
 import com.nanhng.FastFood.dto.constant.RoleType;
 import com.nanhng.FastFood.dto.request.ids.IdsRequest;
 import com.nanhng.FastFood.dto.request.product.AddProductImageReq;
@@ -43,6 +43,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
         if (productRepository.existByName(request.getName())) {
             throw new LovelyException("product already exist", HttpStatus.BAD_REQUEST);
         }
+        UploadFile image = uploadFileRepository.findById(request.getImageId()).orElse(null);
         Product product = Product.builder()
                 .name(request.getName())
                 .price(request.getPrice())
@@ -51,6 +52,9 @@ public class ProductServiceImpl extends BaseService implements ProductService {
                 .shortDescription(request.getShortDescription())
                 .longDescription(request.getLongDescription())
                 .imageId(request.getImageId())
+                .image(image)
+                .discountPercentage(request.getDiscountPercentage())
+                .discountExpiryDate(request.getDiscountExpiryDate())
                 .build();
         return productRepository.save(product);
     }
@@ -90,11 +94,17 @@ public class ProductServiceImpl extends BaseService implements ProductService {
         if (request.getImageId() != null) {
             product.setImageId(request.getImageId());
         }
+        if(request.getDiscountPercentage()!=null){
+            product.setDiscountPercentage(request.getDiscountPercentage());
+        }
+        if(request.getDiscountExpiryDate()!=null){
+            product.setDiscountExpiryDate(request.getDiscountExpiryDate());
+        }
         return getProductDetailRes(productRepository.save(product));
     }
 
     @Override
-    public ProductDetailRes getDetailProduct(int id) {
+    public Product getDetailProduct(int id) {
         if (!productRepository.existById(id)) {
             throw new LovelyException("Không tìm thấy sản phẩm", HttpStatus.NOT_FOUND);
         }
@@ -103,19 +113,15 @@ public class ProductServiceImpl extends BaseService implements ProductService {
         if (product.isDeleted()) {
             throw new LovelyException("Không tìm thấy sản phẩm", HttpStatus.NOT_FOUND);
         }
-        ProductDetailRes response = getProductDetailRes(product);
         UploadFile uploadFile = uploadFileRepository.findById(product.getImageId()).orElse(null);
-        if (uploadFile != null) {
-            response.setThumbUrl(uploadFile.getThumbFilePath());
-            response.setThumbName(uploadFile.getThumbFileName());
-        }
-        return response;
+       product.setImage(uploadFile);
+        return product;
     }
 
     @Override
-    public BaseResponse<List<ProductListRes>> getListProduct(int page, String keyword, ActiveStatus status) {
-        long record = productRepository.totalRecord(keyword, status);
-        List<ProductListRes> list = productRepository.getAllProduct(page, keyword, status);
+    public BaseResponse<List<ProductListRes>> getListProduct(int page, String keyword) {
+        long record = productRepository.totalRecord(keyword);
+        List<ProductListRes> list = productRepository.getAllProduct(page, keyword);
         return new BaseResponse<>(list, record, page);
     }
 

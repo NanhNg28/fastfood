@@ -2,7 +2,6 @@ package com.nanhng.FastFood.entity.product;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.entity.BaseEntity;
 import com.nanhng.FastFood.entity.category.Category;
 import com.nanhng.FastFood.entity.upload_file.UploadFile;
@@ -11,6 +10,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -18,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Table(name = "products")
 public class Product extends BaseEntity {
     @NotNull
@@ -44,4 +44,10 @@ public class Product extends BaseEntity {
 
     @Transient
     UploadFile image;
+
+    @Column(name = "discount_percentage")
+    Integer discountPercentage;
+
+    @Column(name = "discount_expiry_date")
+    LocalDate discountExpiryDate;
 }

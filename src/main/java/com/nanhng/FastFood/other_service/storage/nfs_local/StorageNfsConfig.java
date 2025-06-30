@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.stereotype.Component;
 
 @Getter
 @NoArgsConstructor
@@ -13,4 +14,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StorageNfsConfig implements StorageConfig {
     String directory;
+    String hostname;
 }

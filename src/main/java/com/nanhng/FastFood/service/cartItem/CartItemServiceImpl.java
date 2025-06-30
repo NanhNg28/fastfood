@@ -65,12 +65,11 @@ public class CartItemServiceImpl extends BaseService implements CartItemService 
         log.info("Updating cart item");
 
         CartItem cartItem = cartItemRepository.findById(request.getCartItemId()).orElseThrow(() -> new LovelyException("product not found", HttpStatus.BAD_REQUEST));
-        if (request.getProductId() != null) {
-            Product product = productRepository.findById(request.getProductId()).orElseThrow(() -> new LovelyException("Product not found", HttpStatus.BAD_REQUEST));
-            cartItem.setProductId(product.getId());
-        }
-        if (cartItem.getQuantity() != null || cartItem.getQuantity() != 0) {
+        if (request.getQuantity() > 0) {
             cartItem.setQuantity(request.getQuantity());
+        }
+        else {
+            deleteCartItemByIds(new IdsRequest(List.of(request.getCartItemId())));
         }
         return cartItemRepository.save(cartItem);
     }

@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -24,6 +26,11 @@ public class UpdateProductReq {
 
     String shortDescription;
     String longDescription;
+
     Integer imageId;
+
+    Integer discountPercentage;
+
+    LocalDate discountExpiryDate;
 
 }

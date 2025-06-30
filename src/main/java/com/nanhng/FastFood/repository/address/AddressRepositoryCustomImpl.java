@@ -22,13 +22,5 @@ public class AddressRepositoryCustomImpl extends BaseRepository implements Addre
                 .fetchOne();
     }
 
-    @Override
-    @Transactional
-    public Address addNew(Address address) {
-        BooleanBuilder builder = new BooleanBuilder();
-        builder.and(qAddress.deleted.eq(false));
-        builder.and(qAddress.userId.count().lt(6));
 
-        return query(
-    }
 }

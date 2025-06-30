@@ -1,6 +1,6 @@
 package com.nanhng.FastFood.repository.order;
 
-import com.nanhng.FastFood.dto.constant.OrderStatus;
+import com.nanhng.FastFood.entity.order.constants.OrderStatus;
 import com.nanhng.FastFood.dto.response.dashboard.OrderCountRes;
 import com.nanhng.FastFood.dto.response.dashboard.OrderRevenueRes;
 import com.nanhng.FastFood.dto.response.order.OrderDetailRes;
@@ -11,9 +11,7 @@ import com.nanhng.FastFood.entity.order.QOrder;
 import com.nanhng.FastFood.entity.order.QOrderItem;
 import com.nanhng.FastFood.repository.BaseRepository;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPAExpressions;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -39,7 +37,6 @@ public class OrderRepositoryCustomImpl extends BaseRepository implements OrderRe
         return query().from(qOrder)
                 .where(builder)
                 .select(Projections.fields(OrderRevenueRes.class,
-                        qOrder.totalPrice.sum().as("revenue"),
                         qOrder.createdAt.yearMonth().as("date")))
                 .groupBy(qOrder.createdAt.yearMonth())
                 .fetch();
@@ -198,7 +195,6 @@ public class OrderRepositoryCustomImpl extends BaseRepository implements OrderRe
                         qOrder.status,
                         qOrder.createdAt,
                         qOrder.updatedAt,
-                        qOrder.totalPrice,
                         qOrder.note
                 ))
                 .fetchOne();

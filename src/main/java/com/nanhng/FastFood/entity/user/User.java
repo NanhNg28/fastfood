@@ -2,7 +2,6 @@ package com.nanhng.FastFood.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.nanhng.FastFood.dto.constant.ActiveStatus;
 import com.nanhng.FastFood.dto.constant.RoleType;
 import com.nanhng.FastFood.entity.BaseEntity;
 import com.nanhng.FastFood.entity.address.Address;

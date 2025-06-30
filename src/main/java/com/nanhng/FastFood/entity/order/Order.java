@@ -1,15 +1,14 @@
 package com.nanhng.FastFood.entity.order;
 
-import com.nanhng.FastFood.dto.constant.OrderStatus;
+import com.nanhng.FastFood.entity.order.constants.OrderStatus;
 import com.nanhng.FastFood.entity.BaseEntity;
 import com.nanhng.FastFood.entity.address.Address;
-import com.nanhng.FastFood.entity.user.User;
+import com.nanhng.FastFood.entity.order.constants.PaymentGateway;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,9 +25,6 @@ public class Order extends BaseEntity {
     @Transient
     List<OrderItem> orderItems;
 
-    @Column(name = "total_price")
-    Double totalPrice = 0.0;
-
     @NotNull
     @Column(name = "user_id")
     Integer userId;
@@ -39,4 +35,7 @@ public class Order extends BaseEntity {
 
     @Transient
     Address address;
+
+    @Column(name = "payment_gateway", columnDefinition = "VARCHAR(50)")
+    PaymentGateway paymentGateway = PaymentGateway.MANUAL;
 }

@@ -1,15 +1,14 @@
-package com.nanhng.FastFood.dto.constant;
+package com.nanhng.FastFood.entity.transaction.constants;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.extern.slf4j.Slf4j;
+import com.nanhng.FastFood.dto.constant.BaseEnum;
 
-@Slf4j
-public enum OrderStatus implements BaseEnum<String>{
+public enum PaymentStatus implements BaseEnum<String> {
     PENDING,
-    SHIPPED,
-    DELIVERED,
-    CANCELLED;
+    PAID,
+    FAILED,
+    REFUNDED;
 
     @JsonValue
     public String toValue() {
@@ -17,8 +16,8 @@ public enum OrderStatus implements BaseEnum<String>{
     }
 
     @JsonCreator
-    public static OrderStatus fromValue(String v) {
-        for(OrderStatus c: OrderStatus.values()) {
+    public static PaymentStatus fromValue(String v) {
+        for(PaymentStatus c: PaymentStatus.values()) {
             if(c.toValue().equalsIgnoreCase(v)) {
                 return c;
             }

@@ -40,6 +40,7 @@ public class AddressServiceImpl extends BaseService implements AddressService {
 
     @Override
     public Integer deleteAddress(Integer addressId) {
+        User user = getUser(RoleType.CUSTOMER);
         if(!addressRepository.existsById(addressId)){
             throw new LovelyException("Address not found", HttpStatus.BAD_REQUEST);
         }
@@ -50,15 +51,20 @@ public class AddressServiceImpl extends BaseService implements AddressService {
     @Override
     public Address addAddress(AddAddressReq request) {
         User user = getUser(RoleType.CUSTOMER);
-        if(addressRepository.findByUserId(user.getId()).size() >6){
+        if(addressRepository.findByUserId(user.getId()).size() >=6){
             throw new LovelyException("Tối đa 6 địa chỉ được tồn tại", HttpStatus.BAD_REQUEST);
         }
-
         Address address = Address.builder()
                 .city(request.getCity())
                 .street(request.getStreet())
                 .userId(user.getId())
                 .build();
-        return addressRepository.addNew(address);
+        return addressRepository.save(address);
+    }
+
+    @Override
+    public List<Address> getList() {
+        User user = getUser(RoleType.CUSTOMER);
+        return addressRepository.findByUserId(user.getId());
     }
 }
